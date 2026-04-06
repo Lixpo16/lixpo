@@ -3,37 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LIXPO OS | v19 Fix</title>
+    <title>LIXPO OS | v20 Mirror System</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;600;900&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #050505; --accent: #00d2ff; --panel: rgba(20, 20, 20, 0.95); --border: rgba(255, 255, 255, 0.1); }
+        :root { --bg: #050505; --accent: #00d2ff; --panel: rgba(15, 15, 15, 0.98); --border: rgba(255, 255, 255, 0.1); }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body, html { height: 100%; background: var(--bg); color: #fff; font-family: 'Outfit', sans-serif; overflow: hidden; }
 
-        #desktop { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #111, #050505); }
-        #clock { font-size: 4rem; font-weight: 200; margin-bottom: 20px; }
+        #desktop { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1a1a1a, #050505); }
+        #clock { font-size: 5rem; font-weight: 200; letter-spacing: -2px; margin-bottom: 30px; text-shadow: 0 0 20px rgba(0,210,255,0.2); }
 
         /* Dock */
-        #dock { position: fixed; bottom: 20px; display: flex; gap: 15px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid var(--border); }
-        .dock-btn { width: 60px; height: 60px; background: #1a1a1a; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; transition: 0.3s; }
-        .dock-btn:hover { transform: translateY(-10px); background: var(--accent); }
+        #dock { position: fixed; bottom: 25px; display: flex; gap: 20px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 25px; backdrop-filter: blur(20px); border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .dock-btn { width: 65px; height: 65px; background: #111; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid transparent; }
+        .dock-btn:hover { transform: translateY(-15px) scale(1.1); background: var(--accent); border-color: #fff; color: #000; }
 
-        /* Pencere */
-        .win { position: fixed; inset: 30px; background: var(--panel); border-radius: 20px; border: 1px solid var(--border); display: none; flex-direction: column; z-index: 100; overflow: hidden; }
-        .win-header { padding: 15px 25px; background: #111; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; }
-        .win-body { flex-grow: 1; overflow-y: auto; background: #080808; position: relative; }
-        .close-btn { background: #ff4b4b; border: none; color: #fff; padding: 8px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        /* Window System */
+        .win { position: fixed; inset: 20px; background: var(--panel); border-radius: 25px; border: 1px solid var(--border); display: none; flex-direction: column; z-index: 1000; box-shadow: 0 0 100px rgba(0,0,0,1); animation: winPop 0.3s ease; }
+        @keyframes winPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        .win-header { padding: 15px 30px; background: #000; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; }
+        .win-body { flex-grow: 1; overflow-y: auto; background: #000; position: relative; }
+        .close-btn { background: #ff4b4b; border: none; color: #fff; padding: 10px 25px; border-radius: 10px; cursor: pointer; font-weight: 900; transition: 0.3s; }
+        .close-btn:hover { background: #ff1f1f; transform: scale(1.05); }
 
-        /* Oyun Grid */
-        #game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding: 30px; }
-        .game-card { background: #151515; border-radius: 15px; overflow: hidden; border: 1px solid #222; cursor: pointer; transition: 0.3s; }
-        .game-card:hover { border-color: var(--accent); transform: scale(1.02); }
-        .game-img { width: 100%; height: 120px; background-size: cover; background-position: center; }
-        .game-info { padding: 12px; }
-        .game-name { font-weight: bold; font-size: 0.9rem; color: var(--accent); }
+        /* Mirror (Yedek Link) Paneli */
+        .mirror-bar { background: #111; padding: 10px; display: none; justify-content: center; gap: 10px; border-bottom: 1px solid #222; }
+        .mirror-btn { background: #222; border: 1px solid #444; color: #aaa; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-size: 0.7rem; }
+        .mirror-btn:hover { background: var(--accent); color: #000; }
+
+        /* Game Grid */
+        #game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; padding: 40px; }
+        .game-card { background: #0a0a0a; border-radius: 20px; overflow: hidden; border: 1px solid #1a1a1a; cursor: pointer; transition: 0.3s; position: relative; }
+        .game-card:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0, 210, 255, 0.1); }
+        .game-img { width: 100%; height: 130px; background-size: cover; background-position: center; filter: grayscale(30%); transition: 0.3s; }
+        .game-card:hover .game-img { filter: grayscale(0%); }
+        .game-info { padding: 15px; text-align: center; }
+        .game-name { font-weight: 900; font-size: 1rem; letter-spacing: 1px; }
 
         iframe { width: 100%; height: 100%; border: none; display: none; }
-        .loading-overlay { position: absolute; inset: 0; background: #000; display: none; align-items: center; justify-content: center; z-index: 50; }
+        #loader { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; background: #000; z-index: 10; font-weight: 900; color: var(--accent); letter-spacing: 5px; }
     </style>
 </head>
 <body>
@@ -48,35 +57,61 @@
 
     <div class="win" id="game-win">
         <div class="win-header">
-            <span id="win-title">LIXPO GAME HUB</span>
+            <span id="win-title" style="font-weight:900; color:var(--accent);">LIXPO OS GAME HUB</span>
             <button class="close-btn" onclick="closeGames()">KAPAT</button>
         </div>
+        <div class="mirror-bar" id="mirror-bar">
+            <span style="font-size:0.7rem; color:#666; padding-top:5px;">SUNUCU SEÇ:</span>
+            <button class="mirror-btn" id="m1">Mirror 1 (Ana)</button>
+            <button class="mirror-btn" id="m2">Mirror 2 (Yedek)</button>
+            <button class="mirror-btn" id="m3">Mirror 3 (Global)</button>
+        </div>
         <div class="win-body">
-            <div id="loading" class="loading-overlay">LÜTFEN BEKLEYİN, OYUN YÜKLENİYOR...</div>
+            <div id="loader">LIXPO INDEXING...</div>
             <div id="game-grid"></div>
-            <iframe id="game-frame" src=""></iframe>
+            <iframe id="game-frame"></iframe>
         </div>
     </div>
 
     <script>
         const games = [
-            { name: "Eaglecraft 1.8", img: "https://wallpaperaccess.com/full/1501131.jpg", url: "https://precisionclient.vercel.app/" },
-            { name: "Minecraft Classic", img: "https://classic.minecraft.net/favicon.ico", url: "https://classic.minecraft.net/" },
-            { name: "Paper.io 2", img: "https://paper-io.com/img/screen.png", url: "https://paper-io.com/" },
-            { name: "Geometry Dash", img: "https://i.ytimg.com/vi/jYp9U99Yq9Y/maxresdefault.jpg", url: "https://geometrydash.io/" },
-            { name: "Pac-Man", img: "https://www.google.com/logos/2010/pacman10-i.html/../../logos/2010/pacman10-hp.png", url: "https://www.google.com/logos/2010/pacman10-i.html" },
-            { name: "Snake", img: "https://www.google.com/logos/2010/snake-hp.png", url: "https://www.google.com/logos/2010/snake.html" },
-            { name: "Slope", img: "https://slopegame.io/favicon.ico", url: "https://slope-game.github.io/" },
-            { name: "1v1.LOL", img: "https://1v1.lol/favicon.ico", url: "https://1v1.lol/" },
-            { name: "Crossy Road", img: "https://picsum.photos/seed/crossy/300/150", url: "https://poki.com/tr/g/crossy-road" }
+            { 
+                name: "EAGLECRAFT 1.8", 
+                img: "https://wallpaperaccess.com/full/1501131.jpg", 
+                mirrors: [
+                    "https://eaglecraft.net/play", 
+                    "https://eaglercraft.com/mc/1.8.8/", 
+                    "https://g.v360.org/"
+                ]
+            },
+            { 
+                name: "MINECRAFT CLASSIC", 
+                img: "https://classic.minecraft.net/favicon.ico", 
+                mirrors: ["https://classic.minecraft.net/"] 
+            },
+            { 
+                name: "PAPER.IO 2", 
+                img: "https://paper-io.com/img/screen.png", 
+                mirrors: ["https://paper-io.com/"] 
+            },
+            { 
+                name: "SLOPE", 
+                img: "https://slopegame.io/favicon.ico", 
+                mirrors: ["https://slope-game.github.io/"] 
+            },
+            { 
+                name: "POKI GAMES", 
+                img: "https://picsum.photos/seed/poki/300/150", 
+                mirrors: ["https://poki.com/"] 
+            }
         ];
 
-        // 50+ Oyun için döngü (Poki üzerindeki en popüler oyunlar)
-        for(let i = 1; i <= 42; i++) {
+        // 50+ Doldurma
+        for(let i=1; i<=45; i++) {
             games.push({
-                name: `Popüler Oyun #${i}`,
-                img: `https://picsum.photos/seed/game${i}/300/150`,
-                url: "https://poki.com/" // Genel link, tıklandığında Poki'ye gider
+                name: `Arcade #${i}`,
+                img: `https://picsum.photos/seed/lix${i}/300/150`,
+                mirrors: ["https://www.google.com/logos/2010/pacman10-i.html"]
             });
         }
 
@@ -87,26 +122,35 @@
             games.forEach(g => {
                 const card = document.createElement('div');
                 card.className = 'game-card';
-                card.innerHTML = `
-                    <div class="game-img" style="background-image: url('${g.img}')"></div>
-                    <div class="game-info"><div class="game-name">${g.name}</div></div>
-                `;
-                card.onclick = () => launchGame(g.url, g.name);
+                card.innerHTML = `<div class="game-img" style="background-image:url('${g.img}')"></div><div class="game-info"><div class="game-name">${g.name}</div></div>`;
+                card.onclick = () => launchGame(g);
                 grid.appendChild(card);
             });
         }
 
-        function launchGame(url, name) {
+        function launchGame(game) {
             document.getElementById('game-grid').style.display = 'none';
-            document.getElementById('loading').style.display = 'flex';
-            const frame = document.getElementById('game-frame');
-            frame.src = url;
-            frame.style.display = 'block';
-            document.getElementById('win-title').innerText = "OYNANIYOR: " + name;
+            document.getElementById('loader').style.display = 'flex';
+            document.getElementById('mirror-bar').style.display = 'flex';
             
-            frame.onload = () => {
-                document.getElementById('loading').style.display = 'none';
-            };
+            const frame = document.getElementById('game-frame');
+            frame.src = game.mirrors[0];
+            frame.style.display = 'block';
+            document.getElementById('win-title').innerText = "OYNANIYOR: " + game.name;
+
+            // Mirror butonlarını ayarla
+            const mBtns = ['m1', 'm2', 'm3'];
+            mBtns.forEach((mId, index) => {
+                const btn = document.getElementById(mId);
+                if(game.mirrors[index]) {
+                    btn.style.display = 'inline-block';
+                    btn.onclick = () => { frame.src = game.mirrors[index]; document.getElementById('loader').style.display = 'flex'; };
+                } else {
+                    btn.style.display = 'none';
+                }
+            });
+
+            frame.onload = () => document.getElementById('loader').style.display = 'none';
         }
 
         function closeGames() {
@@ -115,14 +159,15 @@
             document.getElementById('game-frame').src = "";
             document.getElementById('game-frame').style.display = 'none';
             document.getElementById('game-grid').style.display = 'grid';
+            document.getElementById('mirror-bar').style.display = 'none';
             document.getElementById('win-title').innerText = "LIXPO GAME HUB";
         }
 
-        function updateClock() {
-            const n = new Date();
-            document.getElementById('clock').innerText = n.getHours().toString().padStart(2,'0') + ":" + n.getMinutes().toString().padStart(2,'0');
+        function clock() {
+            const d = new Date();
+            document.getElementById('clock').innerText = d.getHours().toString().padStart(2,'0') + ":" + d.getMinutes().toString().padStart(2,'0');
         }
-        setInterval(updateClock, 1000); updateClock();
+        setInterval(clock, 1000); clock();
     </script>
 </body>
 </html>
