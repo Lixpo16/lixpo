@@ -183,41 +183,52 @@
     .loadfill {
       height: 100%;
       background: #fff;
-      animation: fill 1s ease forwards;
+      animation: fill 1.2s ease forwards;
     }
     @keyframes fill { from{width:0} to{width:100%} }
 
-    .log-box {
-      border: 1px solid #1a1a1a;
-      padding: 12px 14px;
-      margin-bottom: 4px;
-      min-height: 52px;
+    .viewer { display: none; border: 1px solid #222; }
+    .viewer.on { display: block; }
+
+    .viewer-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      background: #080808;
+      border-bottom: 1px solid #1e1e1e;
     }
 
-    .log-line {
+    .vdots { display: flex; gap: 5px; }
+    .vd { width: 10px; height: 10px; border-radius: 50%; }
+
+    .vurl {
+      flex: 1;
       font-size: 10px;
+      color: #444;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .vclose {
+      font-size: 9px;
       color: #555;
-      letter-spacing: .5px;
-      line-height: 2;
-    }
-    .log-line.active { color: #fff; }
-    .log-line.done   { color: #444; }
-
-    .open-link {
-      display: inline-block;
-      margin-top: 10px;
-      font-size: 10px;
-      color: #000;
-      background: #fff;
-      padding: 6px 16px;
-      letter-spacing: 1.5px;
       cursor: pointer;
-      border: none;
-      font-family: 'Space Mono', monospace;
-      font-weight: 700;
-      transition: background .15s;
+      padding: 3px 8px;
+      border: 1px solid #2a2a2a;
+      letter-spacing: 1px;
+      transition: all .15s;
     }
-    .open-link:hover { background: #ccc; }
+    .vclose:hover { color: #fff; border-color: #666; }
+
+    .site-frame {
+      width: 100%;
+      height: 420px;
+      border: none;
+      display: block;
+      background: #fff;
+    }
 
     .botbar {
       display: flex;
@@ -325,8 +336,21 @@
         <div class="loadfill" id="lf"></div>
       </div>
 
-      <div class="log-box" id="logBox">
-        <div class="log-line">BEKLIYOR...</div>
+      <div class="viewer" id="viewer">
+        <div class="viewer-top">
+          <div class="vdots">
+            <div class="vd" style="background:#ff5f57;"></div>
+            <div class="vd" style="background:#febc2e;"></div>
+            <div class="vd" style="background:#28c840;"></div>
+          </div>
+          <div class="vurl" id="vurl">—</div>
+          <div class="vclose" onclick="closeViewer()">X CLOSE</div>
+        </div>
+        <iframe
+          class="site-frame"
+          id="frm"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation"
+        ></iframe>
       </div>
 
     </div>
@@ -343,7 +367,6 @@
 
   <script>
     var proxy = 'Ultraviolet';
-    var pendingUrl = '';
 
     setTimeout(function () {
       document.getElementById('splash').style.display = 'none';
@@ -369,37 +392,30 @@
     }
 
     function run(url) {
-      pendingUrl = url;
       var lb = document.getElementById('lb');
       var lf = document.getElementById('lf');
-
       lb.classList.add('on');
       lf.style.animation = 'none';
       lf.offsetHeight;
-      lf.style.animation = 'fill 1s ease forwards';
-
-      document.getElementById('logBox').innerHTML = '<div class="log-line active">BAGLANTI KURULUYOR...</div>';
-      document.getElementById('btxt').textContent = 'ROUTING VIA ' + proxy.toUpperCase() + '...';
-
-      setTimeout(function () {
-        document.getElementById('logBox').innerHTML = '<div class="log-line active">SIFRELEME AKTIF...</div>';
-      }, 380);
-
-      setTimeout(function () {
-        document.getElementById('logBox').innerHTML = '<div class="log-line active">PROXY TUNEL HAZIRLANDI...</div>';
-      }, 780);
-
+      lf.style.animation = 'fill 1.2s ease forwards';
+      document.getElementById('btxt').textContent = 'CONNECTING VIA ' + proxy.toUpperCase() + '...';
       setTimeout(function () {
         lb.classList.remove('on');
-        document.getElementById('btxt').textContent = 'HAZIR · ' + url.replace('https://', '').substring(0, 38);
-        document.getElementById('logBox').innerHTML =
-          '<div class="log-line done">' + url + '</div>' +
-          '<button class="open-link" onclick="openSite()">SAYFAYI AC &#8594;</button>';
-      }, 1200);
+        openFrame(url);
+      }, 1300);
     }
 
-    function openSite() {
-      if (pendingUrl) window.open(pendingUrl, '_blank');
+    function openFrame(url) {
+      document.getElementById('viewer').classList.add('on');
+      document.getElementById('frm').src = url;
+      document.getElementById('vurl').textContent = url;
+      document.getElementById('btxt').textContent = 'TUNNELING: ' + url.replace('https://', '').substring(0, 50);
+    }
+
+    function closeViewer() {
+      document.getElementById('viewer').classList.remove('on');
+      document.getElementById('frm').src = '';
+      document.getElementById('btxt').textContent = 'PROXY: ' + proxy.toUpperCase() + ' · READY';
     }
 
     function tog(id) {
