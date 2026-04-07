@@ -1,469 +1,818 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Lixpo Pro | Ultimate Unblocker</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FreeSearch — Engelsiz Tarayıcı</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a24;
+    --border: rgba(255,255,255,0.07);
+    --accent: #5b7fff;
+    --accent2: #a78bfa;
+    --text: #f0f0f8;
+    --muted: #6b6b88;
+    --success: #34d399;
+    --danger: #f87171;
+  }
 
-        body {
-            font-family: 'Segoe UI', 'Poppins', monospace;
-            background: #000000;
-            min-height: 100vh;
-        }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .splash {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            transition: opacity 0.6s ease;
-        }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-        .lixpo-glow {
-            font-size: 5rem;
-            font-weight: 900;
-            letter-spacing: 15px;
-            color: #fff;
-            text-shadow: 0 0 10px #fff;
-            animation: pulseBW 0.8s ease-in-out infinite alternate;
-        }
+  /* HOMEPAGE */
+  #home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
 
-        @keyframes pulseBW {
-            0% { text-shadow: 0 0 5px #fff; letter-spacing: 15px; opacity: 0.8; }
-            100% { text-shadow: 0 0 30px #fff; letter-spacing: 20px; opacity: 1; }
-        }
+  .bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+    pointer-events: none;
+  }
+  .orb1 { width: 500px; height: 500px; background: #5b7fff; top: -150px; right: -100px; }
+  .orb2 { width: 400px; height: 400px; background: #a78bfa; bottom: -100px; left: -100px; }
+  .orb3 { width: 300px; height: 300px; background: #34d399; top: 40%; left: 30%; opacity: 0.07; }
 
-        .main-menu {
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s ease;
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  .logo-wrap {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.6s ease both;
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(48px, 8vw, 80px);
+    letter-spacing: -3px;
+    line-height: 1;
+    background: linear-gradient(135deg, #fff 0%, #a78bfa 50%, #5b7fff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .tagline {
+    font-size: 14px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 8px;
+    font-weight: 300;
+  }
 
-        .menu-visible {
-            opacity: 1 !important;
-            visibility: visible !important;
-        }
+  .search-wrap {
+    width: 100%;
+    max-width: 660px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
 
-        .nav-bar {
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 20px;
-            padding: 15px 25px;
-            margin-bottom: 25px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-        }
+  .search-bar {
+    display: flex;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 6px 6px 6px 20px;
+    gap: 10px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .search-bar:focus-within {
+    border-color: rgba(91,127,255,0.5);
+    box-shadow: 0 0 0 4px rgba(91,127,255,0.1);
+  }
+  .search-icon { color: var(--muted); flex-shrink: 0; }
+  #main-input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 10px 0;
+  }
+  #main-input::placeholder { color: var(--muted); }
+  .go-btn {
+    background: linear-gradient(135deg, #5b7fff, #a78bfa);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 12px 24px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: opacity 0.2s, transform 0.1s;
+    flex-shrink: 0;
+  }
+  .go-btn:hover { opacity: 0.9; }
+  .go-btn:active { transform: scale(0.97); }
 
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #fff;
-            letter-spacing: 3px;
-        }
+  .quick-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 1.5rem;
+    justify-content: center;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+  .quick-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    padding: 7px 14px;
+    font-size: 13px;
+    color: #ccc;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .quick-btn:hover {
+    background: var(--surface2);
+    border-color: rgba(91,127,255,0.3);
+    color: white;
+    transform: translateY(-1px);
+  }
+  .qico { font-size: 14px; }
 
-        .logo span { color: #888; }
-        .status { color: #aaa; font-size: 0.8rem; background: #1a1a1a; padding: 6px 14px; border-radius: 30px; }
+  .methods {
+    display: flex;
+    gap: 10px;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+  .method-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .method-card:hover {
+    background: var(--surface2);
+    border-color: rgba(91,127,255,0.3);
+    color: var(--text);
+  }
+  .method-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
 
-        .menu-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 25px;
-            justify-content: center;
-        }
+  /* BROWSER */
+  #browser {
+    display: none;
+    flex-direction: column;
+    height: 100vh;
+    background: var(--bg);
+  }
 
-        .menu-btn {
-            background: #111;
-            border: 1px solid #333;
-            padding: 12px 28px;
-            border-radius: 50px;
-            color: #ddd;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+  .browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
 
-        .menu-btn:hover { background: #2a2a2a; color: #fff; border-color: #fff; }
-        .menu-btn.active { background: #fff; color: #000; border-color: #fff; }
+  .nav-btn {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .nav-btn:hover { background: var(--surface2); color: var(--text); }
+  .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
-        .proxy-card {
-            background: #0a0a0a;
-            border: 1px solid #2a2a2a;
-            border-radius: 32px;
-            padding: 28px;
-            margin-bottom: 25px;
-        }
+  .home-btn {
+    background: linear-gradient(135deg, #5b7fff33, #a78bfa33);
+    border-color: rgba(91,127,255,0.3);
+    color: var(--accent);
+  }
+  .home-btn:hover { background: linear-gradient(135deg, #5b7fff55, #a78bfa55); color: white; }
 
-        .card-title { color: #fff; font-size: 1.5rem; margin-bottom: 8px; }
-        .card-sub { color: #777; margin-bottom: 25px; font-size: 0.85rem; border-left: 3px solid #fff; padding-left: 12px; }
+  .url-bar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0 12px;
+    gap: 8px;
+    transition: border-color 0.2s;
+    min-width: 0;
+  }
+  .url-bar:focus-within { border-color: rgba(91,127,255,0.4); }
+  .lock-icon { color: var(--success); flex-shrink: 0; font-size: 12px; }
+  #url-input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 8px 0;
+    min-width: 0;
+  }
+  .go-url-btn {
+    background: var(--accent);
+    border: none;
+    border-radius: 6px;
+    color: white;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    flex-shrink: 0;
+    transition: opacity 0.15s;
+  }
+  .go-url-btn:hover { opacity: 0.85; }
 
-        .search-area {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
+  .proxy-select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    padding: 6px 10px;
+    cursor: pointer;
+    outline: none;
+    flex-shrink: 0;
+  }
 
-        .url-input {
-            flex: 4;
-            background: #000;
-            border: 2px solid #2a2a2a;
-            border-radius: 60px;
-            padding: 15px 24px;
-            font-size: 1rem;
-            color: #fff;
-            font-family: monospace;
-            outline: none;
-        }
+  .browser-content {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
 
-        .url-input:focus { border-color: #fff; background: #0a0a0a; }
+  #browser-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: white;
+  }
 
-        .proxy-btn {
-            background: #1a1a1a;
-            border: 1px solid #444;
-            padding: 0 32px;
-            border-radius: 60px;
-            font-weight: bold;
-            font-size: 1rem;
-            color: #fff;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+  .loading-bar {
+    position: absolute;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #5b7fff, #a78bfa);
+    width: 0%;
+    transition: width 0.3s ease;
+    z-index: 10;
+  }
+  .loading-bar.active { animation: loadprogress 1.5s ease infinite; }
 
-        .proxy-btn:hover { background: #333; border-color: #fff; }
+  @keyframes loadprogress {
+    0% { width: 0%; opacity: 1; }
+    70% { width: 85%; opacity: 1; }
+    100% { width: 100%; opacity: 0; }
+  }
 
-        .quick-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 15px;
-        }
+  .status-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 14px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
 
-        .quick-item {
-            background: #111;
-            border: 1px solid #2c2c2c;
-            padding: 8px 20px;
-            border-radius: 40px;
-            color: #ccc;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+  /* SEARCH RESULTS PAGE */
+  #results-page {
+    display: none;
+    min-height: 100vh;
+    background: var(--bg);
+  }
 
-        .quick-item:hover { background: #2a2a2a; color: #fff; border-color: #fff; }
+  .results-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .results-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    background: linear-gradient(135deg, #fff, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .results-search-bar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0 12px;
+    gap: 8px;
+    max-width: 600px;
+    transition: border-color 0.2s;
+  }
+  .results-search-bar:focus-within { border-color: rgba(91,127,255,0.4); }
+  #results-input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 10px 0;
+  }
+  .results-body {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 24px 20px;
+  }
+  .results-tabs {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .rtab {
+    padding: 8px 18px;
+    font-size: 13px;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    border-radius: 4px 4px 0 0;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .rtab:hover { color: var(--text); background: var(--surface); }
+  .rtab.active { color: var(--accent); border-bottom-color: var(--accent); }
 
-        /* SONUÇ PANELİ - Yeni sekme yöntemi için bilgi */
-        .result-panel {
-            background: #0a0a0a;
-            border: 1px solid #2a2a2a;
-            border-radius: 24px;
-            padding: 30px;
-            text-align: center;
-        }
+  .result-item {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .result-item:last-child { border-bottom: none; }
+  .r-url {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .r-fav {
+    width: 14px; height: 14px;
+    background: var(--surface2);
+    border-radius: 3px;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .r-title {
+    font-size: 18px;
+    color: #7ba7ff;
+    margin-bottom: 6px;
+    font-weight: 500;
+    font-family: 'Syne', sans-serif;
+    transition: color 0.15s;
+  }
+  .result-item:hover .r-title { color: #a78bfa; text-decoration: underline; }
+  .r-desc { font-size: 14px; color: #888; line-height: 1.6; }
+  .r-open-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px;
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .r-open-btn:hover { background: rgba(91,127,255,0.15); border-color: rgba(91,127,255,0.4); }
 
-        .info-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-        }
+  .proxy-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(52,211,153,0.1);
+    border: 1px solid rgba(52,211,153,0.2);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: var(--success);
+    margin-top: 6px;
+    margin-left: 6px;
+  }
 
-        .result-title {
-            color: #fff;
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-        }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
-        .result-desc {
-            color: #aaa;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .manual-link {
-            color: #fff;
-            background: #1a1a1a;
-            padding: 12px 24px;
-            border-radius: 50px;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 10px;
-            border: 1px solid #444;
-        }
-
-        .manual-link:hover {
-            background: #333;
-            border-color: #fff;
-        }
-
-        .footer-note {
-            background: #0a0a0a;
-            border: 1px solid #222;
-            border-radius: 20px;
-            padding: 12px;
-            margin-top: 20px;
-            text-align: center;
-            font-size: 0.7rem;
-            color: #666;
-        }
-
-        @media (max-width: 650px) {
-            .lixpo-glow { font-size: 2.5rem; letter-spacing: 8px; }
-            .menu-btn { padding: 8px 16px; font-size: 0.8rem; }
-            .proxy-card { padding: 18px; }
-        }
-    </style>
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+</style>
 </head>
 <body>
 
-<div class="splash" id="splashScreen">
-    <div class="lixpo-glow">LIXPO</div>
+<!-- HOME PAGE -->
+<div id="home">
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
+
+  <div class="logo-wrap">
+    <div class="logo">FreeSearch</div>
+    <div class="tagline">Engelsiz · Hızlı · Gizli</div>
+  </div>
+
+  <div class="search-wrap">
+    <div class="search-bar">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="main-input" type="text" placeholder="Site adı, URL veya arama yaz..." autocomplete="off" />
+      <button class="go-btn" onclick="doSearch()">ARA</button>
+    </div>
+
+    <div class="quick-links">
+      <div class="quick-btn" onclick="openSite('https://www.youtube.com')"><span class="qico">▶</span> YouTube</div>
+      <div class="quick-btn" onclick="openSite('https://www.google.com')"><span class="qico">G</span> Google</div>
+      <div class="quick-btn" onclick="openSite('https://www.reddit.com')"><span class="qico">R</span> Reddit</div>
+      <div class="quick-btn" onclick="openSite('https://discord.com/app')"><span class="qico">D</span> Discord</div>
+      <div class="quick-btn" onclick="openSite('https://www.twitch.tv')"><span class="qico">T</span> Twitch</div>
+      <div class="quick-btn" onclick="openSite('https://open.spotify.com')"><span class="qico">♫</span> Spotify</div>
+      <div class="quick-btn" onclick="openSite('https://www.tiktok.com')"><span class="qico">♪</span> TikTok</div>
+      <div class="quick-btn" onclick="openSite('https://www.instagram.com')"><span class="qico">◉</span> Instagram</div>
+      <div class="quick-btn" onclick="openSite('https://www.roblox.com')"><span class="qico">◈</span> Roblox</div>
+      <div class="quick-btn" onclick="openSite('https://www.chess.com')"><span class="qico">♛</span> Chess</div>
+    </div>
+
+    <div class="methods">
+      <div class="method-card" onclick="openProxy('https://www.croxyproxy.com')">
+        <div class="method-dot" style="background:#5b7fff"></div>
+        CroxyProxy
+      </div>
+      <div class="method-card" onclick="openProxy('https://hide.me/en/proxy')">
+        <div class="method-dot" style="background:#a78bfa"></div>
+        Hide.me
+      </div>
+      <div class="method-card" onclick="openProxy('https://www.4everproxy.com')">
+        <div class="method-dot" style="background:#34d399"></div>
+        4everproxy
+      </div>
+      <div class="method-card" onclick="openProxy('https://kproxy.com')">
+        <div class="method-dot" style="background:#f97316"></div>
+        KProxy
+      </div>
+      <div class="method-card" onclick="openProxy('https://www.proxysite.com')">
+        <div class="method-dot" style="background:#ec4899"></div>
+        ProxySite
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="main-menu" id="mainMenu">
-    <div class="nav-bar">
-        <div class="logo">LIXPO<span>|PRO</span></div>
-        <div class="status">🔓 ULTIMATE UNBLOCKER | BYPASS AKTİF</div>
+<!-- RESULTS PAGE -->
+<div id="results-page">
+  <div class="results-header">
+    <div class="results-logo" onclick="goHome()">FS</div>
+    <div class="results-search-bar">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="results-input" type="text" placeholder="Ara..." autocomplete="off"/>
+    </div>
+    <button class="go-btn" style="padding:8px 16px;font-size:13px;" onclick="searchFromResults()">ARA</button>
+  </div>
+
+  <div class="results-body">
+    <div class="results-tabs">
+      <div class="rtab active" onclick="setTab('all',this)" id="tab-all">Tümü</div>
+      <div class="rtab" onclick="setTab('proxy',this)" id="tab-proxy">Proxy</div>
+      <div class="rtab" onclick="setTab('mirror',this)" id="tab-mirror">Aynalar</div>
+      <div class="rtab" onclick="setTab('tools',this)" id="tab-tools">Araçlar</div>
+    </div>
+    <div id="results-list"></div>
+  </div>
+</div>
+
+<!-- BROWSER PAGE -->
+<div id="browser" style="display:none;flex-direction:column;">
+  <div class="browser-bar">
+    <button class="nav-btn" onclick="goHome()" title="Ana Sayfa" style="background:linear-gradient(135deg,#5b7fff22,#a78bfa22);border-color:rgba(91,127,255,0.3);color:var(--accent)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    </button>
+    <button class="nav-btn" id="btn-back" onclick="goBack()" title="Geri">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button class="nav-btn" onclick="reloadFrame()" title="Yenile">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
+    </button>
+
+    <div class="url-bar">
+      <span class="lock-icon">🔒</span>
+      <input id="url-input" type="text" placeholder="URL yaz veya ara..." autocomplete="off"/>
+      <button class="go-url-btn" onclick="navigateToUrl()">Git</button>
     </div>
 
-    <div class="menu-buttons">
-        <button class="menu-btn active" data-panel="unblock">🌐 UNBLOCK MERKEZİ</button>
-        <button class="menu-btn" data-panel="info">ℹ️ BYPASS REHBERİ</button>
-        <button class="menu-btn" data-panel="methods">⚡ METODLAR</button>
-    </div>
+    <select class="proxy-select" id="proxy-select" onchange="changeProxy()">
+      <option value="direct">Doğrudan</option>
+      <option value="croxyproxy">CroxyProxy</option>
+      <option value="hide">Hide.me</option>
+      <option value="4ever">4everproxy</option>
+    </select>
+  </div>
 
-    <!-- UNBLOCK PANELİ -->
-    <div id="panelUnblock" class="panel" style="display: block;">
-        <div class="proxy-card">
-            <div class="card-title">🔓 HER SİTEYE ANINDA ERİŞİM</div>
-            <div class="card-sub">Okul engellerini aş · Proxy + Yeni Sekme + Yönlendirme</div>
-            <div class="search-area">
-                <input type="text" id="targetUrl" class="url-input" placeholder="youtube.com, instagram.com, roblox.com, twitter.com ..." value="google.com">
-                <button id="unblockBtn" class="proxy-btn">⚡ SİTEYİ AÇ</button>
-            </div>
-            <div class="quick-grid">
-                <div class="quick-item" data-url="youtube.com">▶️ YouTube</div>
-                <div class="quick-item" data-url="instagram.com">📸 Instagram</div>
-                <div class="quick-item" data-url="twitter.com">🐦 Twitter</div>
-                <div class="quick-item" data-url="roblox.com">🎮 Roblox</div>
-                <div class="quick-item" data-url="chat.openai.com">🤖 ChatGPT</div>
-                <div class="quick-item" data-url="discord.com">💬 Discord</div>
-                <div class="quick-item" data-url="netflix.com">🎬 Netflix</div>
-                <div class="quick-item" data-url="twitch.tv">🎮 Twitch</div>
-                <div class="quick-item" data-url="spotify.com">🎵 Spotify</div>
-                <div class="quick-item" data-url="whatsapp.com">💚 WhatsApp</div>
-            </div>
-        </div>
+  <div class="browser-content">
+    <div class="loading-bar" id="loading-bar"></div>
+    <iframe id="browser-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation"></iframe>
+  </div>
 
-        <div class="result-panel" id="resultPanel">
-            <div class="info-icon">🌍</div>
-            <div class="result-title">Bypass Motoru Hazır</div>
-            <div class="result-desc">
-                Yukarıdaki kutuya istediğiniz siteyi yazın veya hızlı linklere tıklayın.<br>
-                Site otomatik olarak <strong>yeni sekmede</strong> açılacaktır.<br>
-                Eğer açılmazsa, tarayıcı pop-up engelleyiciyi devre dışı bırakın.
-            </div>
-            <div id="lastAction" style="color: #888; font-size: 0.8rem; margin-top: 15px;">Hazır</div>
-        </div>
-    </div>
-
-    <!-- BİLGİ PANELİ -->
-    <div id="panelInfo" class="panel" style="display: none;">
-        <div class="proxy-card">
-            <div class="card-title">⚙️ NASIL ÇALIŞIR?</div>
-            <div class="card-sub">3 farklı bypass yöntemi</div>
-            <div style="color: #ccc; line-height: 1.8; font-family: monospace;">
-                <p><strong>🔹 YÖNTEM 1 - Yeni Sekme:</strong> Site doğrudan yeni sekmede açılır. Okulun DNS filtrelerini aşmak için en etkili yöntem.</p>
-                <p><strong>🔹 YÖNTEM 2 - Proxy Dönüştürücü:</strong> Bazı siteler için alternatif uzantılar kullanılır (örnek: youtube-nocookie.com)</p>
-                <p><strong>🔹 YÖNTEM 3 - Özel Yönlendirme:</strong> Google Translate veya Textise proxy yöntemi ile site içeriği getirilir.</p>
-                <p style="margin-top: 15px;">✅ <strong>Hiçbir hata mesajı görmeyeceksiniz.</strong> Tüm engeller otomatik aşılır.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- METODLAR PANELİ -->
-    <div id="panelMethods" class="panel" style="display: none;">
-        <div class="proxy-card">
-            <div class="card-title">🛠️ MANUEL BYPASS TEKNİKLERİ</div>
-            <div class="card-sub">Eğer otomatik açılmazsa bunları dene</div>
-            <div style="color: #bbb; font-family: monospace;">
-                <p>📌 <strong>1. Google Translate Proxy:</strong><br>
-                https://translate.google.com/translate?sl=auto&tl=en&u=<span style="color:#fff;">[SİTE_ADRESİ]</span></p>
-                <p>📌 <strong>2. Textise Proxy:</strong><br>
-                https://www.textise.iitty/?<span style="color:#fff;">[SİTE_ADRESİ]</span></p>
-                <p>📌 <strong>3. Archive.is ile görüntüle:</strong><br>
-                https://archive.is/newest/<span style="color:#fff;">[SİTE_ADRESİ]</span></p>
-                <p>📌 <strong>4. Site adının sonuna .nyud.net ekleyin (Coral CDN)</strong></p>
-                <hr style="border-color: #333; margin: 15px 0;">
-                <p>💡 <strong>İpucu:</strong> Tarayıcınızın pop-up engelleyicisini kapatın veya Lixpo'ya izin verin.</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="footer-note">
-        🖤 LIXPO PRO | Okul, iş yeri ve her türlü ağ engelini aşar | Tamamen ücretsiz | Hiçbir veri kaydedilmez
-    </div>
+  <div class="status-bar">
+    <div class="status-dot"></div>
+    <span id="status-text">Hazır</span>
+  </div>
 </div>
 
 <script>
-    (function() {
-        // Splash ekranı kapat
-        const splash = document.getElementById('splashScreen');
-        const mainMenu = document.getElementById('mainMenu');
-        
-        setTimeout(() => {
-            if(splash) {
-                splash.style.opacity = '0';
-                setTimeout(() => {
-                    if(splash && splash.parentNode) splash.style.display = 'none';
-                }, 600);
-            }
-            mainMenu.classList.add('menu-visible');
-        }, 2000);
+const homeEl = document.getElementById('home');
+const browserEl = document.getElementById('browser');
+const resultsEl = document.getElementById('results-page');
+const frame = document.getElementById('browser-frame');
+const urlInput = document.getElementById('url-input');
+const loadingBar = document.getElementById('loading-bar');
+const statusText = document.getElementById('status-text');
+const mainInput = document.getElementById('main-input');
+const resultsInput = document.getElementById('results-input');
 
-        // Menü geçişleri
-        const menuBtns = document.querySelectorAll('.menu-btn');
-        const panels = {
-            unblock: document.getElementById('panelUnblock'),
-            info: document.getElementById('panelInfo'),
-            methods: document.getElementById('panelMethods')
-        };
-        
-        function switchPanel(panelId) {
-            Object.keys(panels).forEach(key => {
-                if(panels[key]) panels[key].style.display = 'none';
-            });
-            if(panels[panelId]) panels[panelId].style.display = 'block';
-            
-            menuBtns.forEach(btn => {
-                btn.classList.remove('active');
-                if(btn.getAttribute('data-panel') === panelId) {
-                    btn.classList.add('active');
-                }
-            });
-        }
-        
-        menuBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const panel = btn.getAttribute('data-panel');
-                if(panel === 'unblock') switchPanel('unblock');
-                else if(panel === 'info') switchPanel('info');
-                else if(panel === 'methods') switchPanel('methods');
-            });
-        });
-        
-        // URL düzenleme
-        function normalizeUrl(raw) {
-            let url = raw.trim().toLowerCase();
-            if (!url) return null;
-            
-            // Eğer zaten http ile başlıyorsa direkt kullan
-            if (url.startsWith('http://') || url.startsWith('https://')) {
-                return url;
-            }
-            
-            // www ekleme
-            if (!url.includes('.')) {
-                url = url + '.com';
-            }
-            
-            return 'https://' + url;
-        }
-        
-        // Ana unblock fonksiyonu - HATA YOK, SADECE AÇ
-        function unblockSite(rawUrl) {
-            const finalUrl = normalizeUrl(rawUrl);
-            if (!finalUrl) {
-                document.getElementById('lastAction').innerHTML = '❌ Geçersiz URL';
-                return;
-            }
-            
-            document.getElementById('lastAction').innerHTML = `🔄 Açılıyor: ${finalUrl} ...`;
-            
-            // YÖNTEM 1: Doğrudan yeni sekme (en basit ve en etkili)
-            const newWindow = window.open(finalUrl, '_blank', 'noopener noreferrer');
-            
-            if (newWindow) {
-                document.getElementById('lastAction').innerHTML = `✅ Site açıldı: ${finalUrl}<br>Eğer görünmüyorsa pop-up engelleyiciyi kontrol edin.`;
-            } else {
-                // Pop-up engelleyici varsa alternatif
-                document.getElementById('lastAction').innerHTML = `⚠️ Pop-up engelleyici aktif! Linke tıklayın: <a href="${finalUrl}" target="_blank" style="color:#fff;">${finalUrl}</a>`;
-                
-                // Ayrıca sonuç panelinde manuel link göster
-                const resultPanel = document.getElementById('resultPanel');
-                if(resultPanel) {
-                    const existingLink = resultPanel.querySelector('.manual-link');
-                    if(!existingLink) {
-                        const linkDiv = document.createElement('div');
-                        linkDiv.style.marginTop = '15px';
-                        linkDiv.innerHTML = `<a href="${finalUrl}" target="_blank" class="manual-link">🔗 Manüel olarak tıkla: ${finalUrl}</a>`;
-                        resultPanel.appendChild(linkDiv);
-                    }
-                }
-            }
-        }
-        
-        // Event listenerlar
-        const unblockBtn = document.getElementById('unblockBtn');
-        const urlInput = document.getElementById('targetUrl');
-        
-        unblockBtn.addEventListener('click', () => {
-            const url = urlInput.value;
-            if(url) {
-                unblockSite(url);
-            } else {
-                document.getElementById('lastAction').innerHTML = '❌ Lütfen bir site adı girin (örn: instagram.com)';
-            }
-        });
-        
-        urlInput.addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') {
-                e.preventDefault();
-                unblockBtn.click();
-            }
-        });
-        
-        // Hızlı linkler
-        document.querySelectorAll('.quick-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const site = item.getAttribute('data-url');
-                if(site) {
-                    urlInput.value = site;
-                    unblockSite(site);
-                }
-            });
-        });
-        
-        // Klavye kısayolları
-        document.addEventListener('keydown', (e) => {
-            if(e.ctrlKey && e.key === 'k') {
-                e.preventDefault();
-                urlInput.focus();
-            }
-        });
-        
-        // Sayfa açılışında örnek
-        setTimeout(() => {
-            document.getElementById('lastAction').innerHTML = '✅ Hazır. Site adını yazıp "SİTEYİ AÇ" butonuna basın.';
-        }, 500);
-        
-        console.log("LIXPO PRO ULTIMATE UNBLOCKER AKTİF - TÜM ENGELLER AŞILDI");
-    })();
+let history = [];
+let currentUrl = '';
+let currentQuery = '';
+let currentTab = 'all';
+
+mainInput.addEventListener('keydown', e => { if(e.key === 'Enter') doSearch(); });
+resultsInput.addEventListener('keydown', e => { if(e.key === 'Enter') searchFromResults(); });
+urlInput.addEventListener('keydown', e => { if(e.key === 'Enter') navigateToUrl(); });
+
+function show(page) {
+  homeEl.style.display = 'none';
+  browserEl.style.display = 'none';
+  resultsEl.style.display = 'none';
+  if(page === 'home') homeEl.style.display = 'flex';
+  else if(page === 'browser') { browserEl.style.display = 'flex'; browserEl.style.flexDirection = 'column'; }
+  else if(page === 'results') resultsEl.style.display = 'block';
+}
+
+function goHome() {
+  show('home');
+  mainInput.focus();
+}
+
+function doSearch() {
+  const q = mainInput.value.trim();
+  if(!q) return;
+  currentQuery = q;
+  if(isUrl(q)) { openSite(ensureHttps(q)); return; }
+  showResults(q);
+}
+
+function searchFromResults() {
+  const q = resultsInput.value.trim();
+  if(!q) return;
+  currentQuery = q;
+  if(isUrl(q)) { openSite(ensureHttps(q)); return; }
+  showResults(q);
+}
+
+function isUrl(s) {
+  return s.startsWith('http') || s.match(/^[\w-]+\.(com|net|org|io|tv|gg|co|me|app|site|web|edu|gov|tr|de|uk|fr|ru|jp|cn)([\/\?#].*)?$/i);
+}
+
+function ensureHttps(url) {
+  if(!url.startsWith('http')) return 'https://' + url;
+  return url;
+}
+
+function getDomain(q) {
+  const map = {
+    'youtube':'youtube.com','yt':'youtube.com','google':'google.com',
+    'reddit':'reddit.com','discord':'discord.com','twitch':'twitch.tv',
+    'spotify':'spotify.com','tiktok':'tiktok.com','instagram':'instagram.com',
+    'twitter':'twitter.com','x':'x.com','roblox':'roblox.com',
+    'steam':'store.steampowered.com','netflix':'netflix.com',
+    'facebook':'facebook.com','fb':'facebook.com','wiki':'wikipedia.org',
+    'wikipedia':'en.wikipedia.org','chess':'chess.com',
+    'github':'github.com','gmail':'gmail.com','drive':'drive.google.com',
+  };
+  const lower = q.toLowerCase();
+  for(const k in map) { if(lower === k || lower.includes(k)) return map[k]; }
+  return q.toLowerCase().replace(/\s+/g,'') + '.com';
+}
+
+function getProxyUrl(target, service) {
+  const enc = encodeURIComponent(target);
+  if(service === 'croxyproxy') return `https://www.croxyproxy.com/?url=${enc}`;
+  if(service === 'hide') return `https://hide.me/en/proxy?url=${enc}`;
+  if(service === '4ever') return `https://www.4everproxy.com/?url=${enc}`;
+  return target;
+}
+
+function showResults(query) {
+  currentQuery = query;
+  resultsInput.value = query;
+  show('results');
+  renderResults();
+}
+
+function setTab(tab, el) {
+  currentTab = tab;
+  document.querySelectorAll('.rtab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderResults();
+}
+
+function renderResults() {
+  const q = currentQuery;
+  const domain = getDomain(q);
+  const name = q.charAt(0).toUpperCase() + q.slice(1);
+  const container = document.getElementById('results-list');
+
+  const proxyUrls = [
+    { name: 'CroxyProxy', url: `https://www.croxyproxy.com/?url=https://${domain}`, desc: 'Ücretsiz SSL proxy servisi. Reklamsız, hızlı.' },
+    { name: 'Hide.me Proxy', url: `https://hide.me/en/proxy?url=https://${domain}`, desc: 'Şifreli bağlantı. Okul ağlarında sorunsuz çalışır.' },
+    { name: '4everproxy', url: `https://www.4everproxy.com/?url=https://${domain}`, desc: 'Anonim erişim için güçlü proxy.' },
+    { name: 'KProxy', url: `https://kproxy.com/?url=https://${domain}`, desc: 'Hızlı ve güvenilir proxy servisi.' },
+    { name: 'ProxySite', url: `https://www.proxysite.com/index.php?q=https://${domain}`, desc: 'SSL tabanlı ücretsiz proxy.' },
+  ];
+
+  const mirrorUrls = [
+    { name: name + ' — Doğrudan Bağlantı', url: `https://${domain}`, desc: 'Orijinal siteye doğrudan bağlanmayı dene.' },
+    { name: 'Tor Browser ile Aç', url: 'https://www.torproject.org/download/', desc: 'Tor Browser indir ve anonim gezinti yap.' },
+    { name: 'ProtonVPN — Ücretsiz VPN', url: 'https://protonvpn.com/free-vpn', desc: 'Ücretsiz VPN ile engellemeleri aş.' },
+    { name: 'Cloudflare DNS (1.1.1.1)', url: 'https://1.1.1.1/', desc: 'DNS ayarını değiştirerek birçok engelini aş.' },
+    { name: 'Windscribe VPN', url: 'https://windscribe.com', desc: 'Aylık 10 GB ücretsiz VPN kotası.' },
+  ];
+
+  const webResults = [
+    { title: name + ' — Resmi Site', url: `https://${domain}`, desc: `${name} resmi web sitesi. En güncel içerikler, özellikler ve hizmetlere doğrudan erişin.` },
+    { title: name + ' — Google Arama', url: `https://www.google.com/search?q=${encodeURIComponent(q)}`, desc: `"${q}" için Google arama sonuçları. Binlerce kaynak ve güncel bilgiye ulaşın.` },
+    { title: name + ' — Wikipedia', url: `https://tr.wikipedia.org/wiki/${encodeURIComponent(q)}`, desc: `${name} hakkında kapsamlı bilgi. Wikipedia özgür ansiklopedisinden detaylı açıklamalar.` },
+    { title: name + ' — DuckDuckGo', url: `https://duckduckgo.com/?q=${encodeURIComponent(q)}`, desc: 'Gizlilik odaklı arama. Takip yok, reklam profili yok.' },
+  ];
+
+  const toolResults = [
+    { title: 'Wayback Machine — ' + name, url: `https://web.archive.org/web/*/${domain}`, desc: 'Sitenin eski versiyonlarına arşivden eriş.' },
+    { title: 'Translate — ' + name, url: `https://translate.google.com/translate?u=https://${domain}`, desc: 'Google Çeviri üzerinden siteyi Türkçe görüntüle.' },
+    { title: 'Google Cache — ' + name, url: `https://webcache.googleusercontent.com/search?q=cache:${domain}`, desc: 'Google önbelleğinden sitenin son kaydedilmiş halini gör.' },
+    { title: 'Web Proxy Tester', url: 'https://www.proxysite.com', desc: 'Çeşitli proxy servislerini tek tıkla test et.' },
+  ];
+
+  let items = [];
+  if(currentTab === 'all') items = [...webResults, { title: '— Proxy ile aç —', divider: true }, proxyUrls[0], proxyUrls[1]];
+  else if(currentTab === 'proxy') items = proxyUrls;
+  else if(currentTab === 'mirror') items = mirrorUrls;
+  else if(currentTab === 'tools') items = toolResults;
+
+  container.innerHTML = items.map(item => {
+    if(item.divider) return `<div style="padding:12px 0 4px;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">${item.title}</div>`;
+    const isProxy = currentTab === 'proxy' || item.url.includes('proxy') || item.url.includes('hide.me');
+    return `
+      <div class="result-item" onclick="openSite('${item.url}')">
+        <div class="r-url"><span class="r-fav"></span>${item.url.replace('https://','').replace('http://','').split('/')[0]}</div>
+        <div class="r-title">${item.title}</div>
+        <div class="r-desc">${item.desc}</div>
+        <button class="r-open-btn" onclick="event.stopPropagation();openSite('${item.url}')">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Tarayıcıda Aç
+        </button>
+        ${isProxy ? '<span class="proxy-tag">● Proxy Aktif</span>' : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function openSite(url) {
+  const proxy = document.getElementById('proxy-select') ? document.getElementById('proxy-select').value : 'direct';
+  const finalUrl = proxy === 'direct' ? url : getProxyUrl(url, proxy);
+  currentUrl = finalUrl;
+  urlInput.value = url;
+  show('browser');
+  loadUrl(finalUrl);
+}
+
+function openProxy(url) {
+  currentUrl = url;
+  urlInput.value = url;
+  show('browser');
+  loadUrl(url);
+}
+
+function loadUrl(url) {
+  statusText.textContent = 'Yükleniyor...';
+  loadingBar.classList.add('active');
+  
+  frame.onload = () => {
+    loadingBar.classList.remove('active');
+    loadingBar.style.width = '0';
+    statusText.textContent = 'Sayfa yüklendi — ' + url.replace('https://','').split('/')[0];
+  };
+  frame.onerror = () => {
+    loadingBar.classList.remove('active');
+    statusText.textContent = 'Bağlantı hatası';
+  };
+
+  history.push(url);
+  frame.src = url;
+}
+
+function navigateToUrl() {
+  let url = urlInput.value.trim();
+  if(!url) return;
+  if(!url.startsWith('http')) {
+    if(isUrl(url)) url = 'https://' + url;
+    else url = `https://duckduckgo.com/?q=${encodeURIComponent(url)}`;
+  }
+  const proxy = document.getElementById('proxy-select').value;
+  const finalUrl = proxy === 'direct' ? url : getProxyUrl(url, proxy);
+  currentUrl = finalUrl;
+  loadUrl(finalUrl);
+}
+
+function goBack() {
+  if(history.length > 1) {
+    history.pop();
+    const prev = history[history.length - 1];
+    frame.src = prev;
+    urlInput.value = prev;
+  }
+}
+
+function reloadFrame() {
+  frame.src = frame.src;
+  statusText.textContent = 'Yenileniyor...';
+  loadingBar.classList.add('active');
+}
+
+function changeProxy() {
+  if(currentUrl) {
+    const base = currentUrl.split('?')[0];
+    const proxy = document.getElementById('proxy-select').value;
+    const newUrl = proxy === 'direct' ? base : getProxyUrl(base, proxy);
+    loadUrl(newUrl);
+  }
+}
 </script>
 </body>
 </html>
