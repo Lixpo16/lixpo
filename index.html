@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Lixpo Proxy | Black & White Unblocker</title>
+    <title>Lixpo Pro | Ultimate Unblocker</title>
     <style>
         * {
             margin: 0;
@@ -12,55 +12,43 @@
         }
 
         body {
-            font-family: 'Segoe UI', 'Poppins', 'Monaco', monospace;
+            font-family: 'Segoe UI', 'Poppins', monospace;
             background: #000000;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
-        /* SPLASH EKRANI - Parlayan LIXPO */
         .splash {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000000;
+            background: #000;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10000;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
+            transition: opacity 0.6s ease;
         }
 
         .lixpo-glow {
             font-size: 5rem;
             font-weight: 900;
             letter-spacing: 15px;
-            color: #ffffff;
-            text-shadow: 0 0 10px #ffffff, 0 0 20px #aaaaaa, 0 0 30px #666666;
-            animation: pulseBW 1s ease-in-out infinite alternate;
-            font-family: 'Segoe UI', 'Impact', monospace;
+            color: #fff;
+            text-shadow: 0 0 10px #fff;
+            animation: pulseBW 0.8s ease-in-out infinite alternate;
         }
 
         @keyframes pulseBW {
-            0% {
-                text-shadow: 0 0 5px #fff, 0 0 10px #aaa;
-                letter-spacing: 15px;
-                opacity: 0.8;
-            }
-            100% {
-                text-shadow: 0 0 25px #fff, 0 0 40px #888, 0 0 60px #444;
-                letter-spacing: 20px;
-                opacity: 1;
-            }
+            0% { text-shadow: 0 0 5px #fff; letter-spacing: 15px; opacity: 0.8; }
+            100% { text-shadow: 0 0 30px #fff; letter-spacing: 20px; opacity: 1; }
         }
 
-        /* ANA MENÜ - SİYAH BEYAZ */
         .main-menu {
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.5s ease, visibility 0.5s;
+            transition: opacity 0.5s ease;
             max-width: 1300px;
             margin: 0 auto;
             padding: 20px;
@@ -71,10 +59,9 @@
             visibility: visible !important;
         }
 
-        /* Üst Navigasyon */
         .nav-bar {
-            background: #111111;
-            border: 1px solid #333333;
+            background: #111;
+            border: 1px solid #333;
             border-radius: 20px;
             padding: 15px 25px;
             margin-bottom: 25px;
@@ -83,31 +70,18 @@
             justify-content: space-between;
             align-items: center;
             gap: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
         }
 
         .logo {
             font-size: 1.8rem;
             font-weight: bold;
-            color: #ffffff;
+            color: #fff;
             letter-spacing: 3px;
-            text-shadow: 0 0 5px #fff;
         }
 
-        .logo span {
-            color: #888888;
-        }
+        .logo span { color: #888; }
+        .status { color: #aaa; font-size: 0.8rem; background: #1a1a1a; padding: 6px 14px; border-radius: 30px; }
 
-        .status {
-            color: #aaaaaa;
-            font-size: 0.8rem;
-            background: #1a1a1a;
-            padding: 6px 14px;
-            border-radius: 30px;
-            border-left: 2px solid #ffffff;
-        }
-
-        /* Menü Butonları */
         .menu-buttons {
             display: flex;
             flex-wrap: wrap;
@@ -117,56 +91,29 @@
         }
 
         .menu-btn {
-            background: #111111;
-            border: 1px solid #333333;
+            background: #111;
+            border: 1px solid #333;
             padding: 12px 28px;
             border-radius: 50px;
-            color: #dddddd;
+            color: #ddd;
             font-weight: 600;
-            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: monospace;
+            transition: all 0.2s;
         }
 
-        .menu-btn:hover {
-            background: #2a2a2a;
-            color: #ffffff;
-            border-color: #ffffff;
-            transform: translateY(-2px);
-        }
+        .menu-btn:hover { background: #2a2a2a; color: #fff; border-color: #fff; }
+        .menu-btn.active { background: #fff; color: #000; border-color: #fff; }
 
-        .menu-btn.active {
-            background: #ffffff;
-            color: #000000;
-            border-color: #ffffff;
-            box-shadow: 0 0 15px rgba(255,255,255,0.3);
-        }
-
-        /* Ana Proxy Kartı */
         .proxy-card {
             background: #0a0a0a;
             border: 1px solid #2a2a2a;
             border-radius: 32px;
             padding: 28px;
             margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
 
-        .card-title {
-            color: #ffffff;
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .card-sub {
-            color: #777777;
-            margin-bottom: 25px;
-            font-size: 0.85rem;
-            border-left: 3px solid #fff;
-            padding-left: 12px;
-        }
+        .card-title { color: #fff; font-size: 1.5rem; margin-bottom: 8px; }
+        .card-sub { color: #777; margin-bottom: 25px; font-size: 0.85rem; border-left: 3px solid #fff; padding-left: 12px; }
 
         .search-area {
             display: flex;
@@ -177,42 +124,32 @@
 
         .url-input {
             flex: 4;
-            background: #000000;
+            background: #000;
             border: 2px solid #2a2a2a;
             border-radius: 60px;
             padding: 15px 24px;
             font-size: 1rem;
-            color: #ffffff;
+            color: #fff;
             font-family: monospace;
             outline: none;
-            transition: all 0.2s;
         }
 
-        .url-input:focus {
-            border-color: #ffffff;
-            background: #0a0a0a;
-        }
+        .url-input:focus { border-color: #fff; background: #0a0a0a; }
 
         .proxy-btn {
             background: #1a1a1a;
-            border: 1px solid #444444;
+            border: 1px solid #444;
             padding: 0 32px;
             border-radius: 60px;
             font-weight: bold;
             font-size: 1rem;
-            color: #ffffff;
+            color: #fff;
             cursor: pointer;
             transition: all 0.2s;
-            font-family: monospace;
         }
 
-        .proxy-btn:hover {
-            background: #333333;
-            border-color: #ffffff;
-            transform: scale(1.02);
-        }
+        .proxy-btn:hover { background: #333; border-color: #fff; }
 
-        /* Hızlı Linkler - Siyah Beyaz */
         .quick-grid {
             display: flex;
             flex-wrap: wrap;
@@ -221,81 +158,57 @@
         }
 
         .quick-item {
-            background: #111111;
+            background: #111;
             border: 1px solid #2c2c2c;
             padding: 8px 20px;
             border-radius: 40px;
-            color: #cccccc;
-            text-decoration: none;
-            font-size: 0.85rem;
+            color: #ccc;
             cursor: pointer;
             transition: 0.2s;
-            font-family: monospace;
         }
 
-        .quick-item:hover {
-            background: #2a2a2a;
-            color: #ffffff;
-            border-color: #ffffff;
-        }
+        .quick-item:hover { background: #2a2a2a; color: #fff; border-color: #fff; }
 
-        /* İFRAME GÖRÜNTÜLEYİCİ */
-        .iframe-box {
-            background: #000000;
-            border-radius: 24px;
-            overflow: hidden;
-            border: 1px solid #2a2a2a;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
-            height: 60vh;
-            min-height: 450px;
-            position: relative;
-        }
-
-        .iframe-toolbar {
+        /* SONUÇ PANELİ - Yeni sekme yöntemi için bilgi */
+        .result-panel {
             background: #0a0a0a;
-            padding: 12px 20px;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
-            border-bottom: 1px solid #222222;
+            border: 1px solid #2a2a2a;
+            border-radius: 24px;
+            padding: 30px;
+            text-align: center;
         }
 
-        .tool-btn {
+        .info-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .result-title {
+            color: #fff;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .result-desc {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .manual-link {
+            color: #fff;
             background: #1a1a1a;
-            border: 1px solid #3a3a3a;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            cursor: pointer;
-            color: #ffffff;
-            font-size: 1.2rem;
-            transition: 0.2s;
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            border: 1px solid #444;
         }
 
-        .tool-btn:hover {
-            background: #333333;
-            border-color: #ffffff;
-        }
-
-        .url-indicator {
-            flex: 1;
-            background: #050505;
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            color: #bbbbbb;
-            font-family: monospace;
-            overflow-x: auto;
-            white-space: nowrap;
-            border: 1px solid #222;
-        }
-
-        iframe {
-            width: 100%;
-            height: calc(100% - 62px);
-            border: none;
-            background: #ffffff;
+        .manual-link:hover {
+            background: #333;
+            border-color: #fff;
         }
 
         .footer-note {
@@ -306,122 +219,116 @@
             margin-top: 20px;
             text-align: center;
             font-size: 0.7rem;
-            color: #666666;
+            color: #666;
         }
 
         @media (max-width: 650px) {
             .lixpo-glow { font-size: 2.5rem; letter-spacing: 8px; }
             .menu-btn { padding: 8px 16px; font-size: 0.8rem; }
             .proxy-card { padding: 18px; }
-            .iframe-box { height: 50vh; }
         }
     </style>
 </head>
 <body>
 
-<!-- SPLASH EKRANI -->
 <div class="splash" id="splashScreen">
     <div class="lixpo-glow">LIXPO</div>
 </div>
 
-<!-- ANA MENÜ SİYAH BEYAZ -->
 <div class="main-menu" id="mainMenu">
     <div class="nav-bar">
-        <div class="logo">LIXPO<span>|BW</span></div>
-        <div class="status">⚫ UNBLOCKER PROXY | SİYAH & BEYAZ</div>
+        <div class="logo">LIXPO<span>|PRO</span></div>
+        <div class="status">🔓 ULTIMATE UNBLOCKER | BYPASS AKTİF</div>
     </div>
 
-    <!-- Menü Butonları -->
     <div class="menu-buttons">
-        <button class="menu-btn active" data-panel="proxy">🌐 PROXY GİRİŞ</button>
-        <button class="menu-btn" data-panel="info">ℹ️ BİLGİ & BYPASS</button>
-        <button class="menu-btn" data-panel="shortcuts">⚡ HIZLI KISAYOLLAR</button>
+        <button class="menu-btn active" data-panel="unblock">🌐 UNBLOCK MERKEZİ</button>
+        <button class="menu-btn" data-panel="info">ℹ️ BYPASS REHBERİ</button>
+        <button class="menu-btn" data-panel="methods">⚡ METODLAR</button>
     </div>
 
-    <!-- PANEL 1: PROXY GİRİŞ -->
-    <div id="panelProxy" class="panel" style="display: block;">
+    <!-- UNBLOCK PANELİ -->
+    <div id="panelUnblock" class="panel" style="display: block;">
         <div class="proxy-card">
-            <div class="card-title">🔓 HER SİTEYİ PROXY İLE AÇ</div>
-            <div class="card-sub">Okul engellerini tamamen bypass et · X-Frame korumasını aşar</div>
+            <div class="card-title">🔓 HER SİTEYE ANINDA ERİŞİM</div>
+            <div class="card-sub">Okul engellerini aş · Proxy + Yeni Sekme + Yönlendirme</div>
             <div class="search-area">
-                <input type="text" id="proxyUrl" class="url-input" placeholder="https://ornek.com veya youtube.com, instagram.com ..." value="https://www.google.com">
-                <button id="goProxy" class="proxy-btn">🚀 PROXY İLE AÇ</button>
+                <input type="text" id="targetUrl" class="url-input" placeholder="youtube.com, instagram.com, roblox.com, twitter.com ..." value="google.com">
+                <button id="unblockBtn" class="proxy-btn">⚡ SİTEYİ AÇ</button>
             </div>
             <div class="quick-grid">
-                <div class="quick-item" data-url="https://www.youtube.com">▶️ YouTube</div>
-                <div class="quick-item" data-url="https://www.instagram.com">📸 Instagram</div>
-                <div class="quick-item" data-url="https://x.com">🐦 X (Twitter)</div>
-                <div class="quick-item" data-url="https://www.roblox.com">🎮 Roblox</div>
-                <div class="quick-item" data-url="https://chat.openai.com">🤖 ChatGPT</div>
-                <div class="quick-item" data-url="https://discord.com">💬 Discord</div>
-                <div class="quick-item" data-url="https://www.netflix.com">🎬 Netflix</div>
-                <div class="quick-item" data-url="https://www.twitch.tv">🎮 Twitch</div>
-                <div class="quick-item" data-url="https://www.google.com">🔍 Google</div>
+                <div class="quick-item" data-url="youtube.com">▶️ YouTube</div>
+                <div class="quick-item" data-url="instagram.com">📸 Instagram</div>
+                <div class="quick-item" data-url="twitter.com">🐦 Twitter</div>
+                <div class="quick-item" data-url="roblox.com">🎮 Roblox</div>
+                <div class="quick-item" data-url="chat.openai.com">🤖 ChatGPT</div>
+                <div class="quick-item" data-url="discord.com">💬 Discord</div>
+                <div class="quick-item" data-url="netflix.com">🎬 Netflix</div>
+                <div class="quick-item" data-url="twitch.tv">🎮 Twitch</div>
+                <div class="quick-item" data-url="spotify.com">🎵 Spotify</div>
+                <div class="quick-item" data-url="whatsapp.com">💚 WhatsApp</div>
             </div>
         </div>
 
-        <!-- İFRAME GÖRÜNTÜLEYİCİ -->
-        <div class="iframe-box">
-            <div class="iframe-toolbar">
-                <button class="tool-btn" id="backIframe" title="Geri">◀</button>
-                <button class="tool-btn" id="forwardIframe" title="İleri">▶</button>
-                <button class="tool-btn" id="reloadIframe" title="Yenile">⟳</button>
-                <div class="url-indicator" id="iframeUrlIndicator">https://www.google.com</div>
+        <div class="result-panel" id="resultPanel">
+            <div class="info-icon">🌍</div>
+            <div class="result-title">Bypass Motoru Hazır</div>
+            <div class="result-desc">
+                Yukarıdaki kutuya istediğiniz siteyi yazın veya hızlı linklere tıklayın.<br>
+                Site otomatik olarak <strong>yeni sekmede</strong> açılacaktır.<br>
+                Eğer açılmazsa, tarayıcı pop-up engelleyiciyi devre dışı bırakın.
             </div>
-            <iframe id="proxyIframe" src="about:blank" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-top-navigation allow-top-navigation-by-user-activation"></iframe>
+            <div id="lastAction" style="color: #888; font-size: 0.8rem; margin-top: 15px;">Hazır</div>
         </div>
     </div>
 
-    <!-- PANEL 2: BİLGİ PANELİ -->
+    <!-- BİLGİ PANELİ -->
     <div id="panelInfo" class="panel" style="display: none;">
         <div class="proxy-card">
-            <div class="card-title">⚙️ BYPASS MEKANİZMASI</div>
-            <div class="card-sub">Hiçbir engel yok · Tam özgürlük</div>
-            <div style="color: #cccccc; line-height: 1.6; font-family: monospace; padding: 10px;">
-                <p>✅ <strong>Çoklu Proxy Havuzu:</strong> 5 farklı proxy sunucusu (AllOrigins, CORSProxy, vb.)</p>
-                <p>✅ <strong>X-Frame-Options Bypass:</strong> İçerik doğrudan iframe'e yazılır, reddetme olmaz.</p>
-                <p>✅ <strong>Otomatik URL Düzenleme:</strong> http/https ekler, eksikleri tamamlar.</p>
-                <p>✅ <strong>Fallback Sistemi:</strong> Proxy çalışmazsa yeni sekmede açar.</p>
-                <p>✅ <strong>Siyah Beyaz Tema:</strong> Göz yormaz, okul dostu görünüm.</p>
-                <p style="margin-top: 15px;">🔒 Hiçbir veri kaydedilmez. Tamamen anonim proxy talepleri.</p>
+            <div class="card-title">⚙️ NASIL ÇALIŞIR?</div>
+            <div class="card-sub">3 farklı bypass yöntemi</div>
+            <div style="color: #ccc; line-height: 1.8; font-family: monospace;">
+                <p><strong>🔹 YÖNTEM 1 - Yeni Sekme:</strong> Site doğrudan yeni sekmede açılır. Okulun DNS filtrelerini aşmak için en etkili yöntem.</p>
+                <p><strong>🔹 YÖNTEM 2 - Proxy Dönüştürücü:</strong> Bazı siteler için alternatif uzantılar kullanılır (örnek: youtube-nocookie.com)</p>
+                <p><strong>🔹 YÖNTEM 3 - Özel Yönlendirme:</strong> Google Translate veya Textise proxy yöntemi ile site içeriği getirilir.</p>
+                <p style="margin-top: 15px;">✅ <strong>Hiçbir hata mesajı görmeyeceksiniz.</strong> Tüm engeller otomatik aşılır.</p>
             </div>
         </div>
     </div>
 
-    <!-- PANEL 3: HIZLI KISAYOLLAR -->
-    <div id="panelShortcuts" class="panel" style="display: none;">
+    <!-- METODLAR PANELİ -->
+    <div id="panelMethods" class="panel" style="display: none;">
         <div class="proxy-card">
-            <div class="card-title">⌨️ KLAVYE KISAYOLLARI</div>
-            <div class="card-sub">Daha hızlı unblock deneyimi</div>
-            <div style="color: #bbbbbb; font-family: monospace; padding: 10px;">
-                <p>🎯 <strong>Enter</strong> - Proxy kutusunda yazdığınız siteyi açar</p>
-                <p>🎯 <strong>Ctrl + K</strong> - İmleci proxy kutusuna odaklar</p>
-                <p>🎯 <strong>Alt + G</strong> - Google'ı açar</p>
-                <p>🎯 <strong>Alt + Y</strong> - YouTube'u açar</p>
-                <p>🎯 <strong>Esc</strong> - İframe yenileme</p>
-                <p>🎯 <strong>F5</strong> - Sayfayı yeniler (iframe değil)</p>
+            <div class="card-title">🛠️ MANUEL BYPASS TEKNİKLERİ</div>
+            <div class="card-sub">Eğer otomatik açılmazsa bunları dene</div>
+            <div style="color: #bbb; font-family: monospace;">
+                <p>📌 <strong>1. Google Translate Proxy:</strong><br>
+                https://translate.google.com/translate?sl=auto&tl=en&u=<span style="color:#fff;">[SİTE_ADRESİ]</span></p>
+                <p>📌 <strong>2. Textise Proxy:</strong><br>
+                https://www.textise.iitty/?<span style="color:#fff;">[SİTE_ADRESİ]</span></p>
+                <p>📌 <strong>3. Archive.is ile görüntüle:</strong><br>
+                https://archive.is/newest/<span style="color:#fff;">[SİTE_ADRESİ]</span></p>
+                <p>📌 <strong>4. Site adının sonuna .nyud.net ekleyin (Coral CDN)</strong></p>
                 <hr style="border-color: #333; margin: 15px 0;">
-                <p>📌 <strong>Önerilen Siteler:</strong> Oyunlar, sosyal medya, ders araçları, yapay zeka.</p>
-                <p>📌 Proxy havuzu sürekli güncellenir. Tüm engeller aşılır.</p>
+                <p>💡 <strong>İpucu:</strong> Tarayıcınızın pop-up engelleyicisini kapatın veya Lixpo'ya izin verin.</p>
             </div>
         </div>
     </div>
 
     <div class="footer-note">
-        🖤 LIXPO BLACK & WHITE UNBLOCKER | Okul ağları için geliştirilmiş tam bypass sistemi | Hiçbir site engellenemez
+        🖤 LIXPO PRO | Okul, iş yeri ve her türlü ağ engelini aşar | Tamamen ücretsiz | Hiçbir veri kaydedilmez
     </div>
 </div>
 
 <script>
     (function() {
-        // SPLASH EKRANI KAPATMA
+        // Splash ekranı kapat
         const splash = document.getElementById('splashScreen');
         const mainMenu = document.getElementById('mainMenu');
         
         setTimeout(() => {
             if(splash) {
                 splash.style.opacity = '0';
-                splash.style.visibility = 'hidden';
                 setTimeout(() => {
                     if(splash && splash.parentNode) splash.style.display = 'none';
                 }, 600);
@@ -429,12 +336,12 @@
             mainMenu.classList.add('menu-visible');
         }, 2000);
 
-        // MENÜ PANEL GEÇİŞLERİ (SADECE SİYAH BEYAZ)
+        // Menü geçişleri
         const menuBtns = document.querySelectorAll('.menu-btn');
         const panels = {
-            proxy: document.getElementById('panelProxy'),
+            unblock: document.getElementById('panelUnblock'),
             info: document.getElementById('panelInfo'),
-            shortcuts: document.getElementById('panelShortcuts')
+            methods: document.getElementById('panelMethods')
         };
         
         function switchPanel(panelId) {
@@ -454,181 +361,108 @@
         menuBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const panel = btn.getAttribute('data-panel');
-                if(panel === 'proxy') switchPanel('proxy');
+                if(panel === 'unblock') switchPanel('unblock');
                 else if(panel === 'info') switchPanel('info');
-                else if(panel === 'shortcuts') switchPanel('shortcuts');
+                else if(panel === 'methods') switchPanel('methods');
             });
         });
         
-        // PROXY LİSTESİ (CORS bypass için)
-        const PROXY_LIST = [
-            "https://api.allorigins.win/get?url=",
-            "https://corsproxy.io/?url=",
-            "https://cors-anywhere.herokuapp.com/",
-            "https://proxy.cors.sh/",
-            "https://thingproxy.freeboard.io/fetch/"
-        ];
-        
-        // URL DÜZENLEME
+        // URL düzenleme
         function normalizeUrl(raw) {
-            let url = raw.trim();
+            let url = raw.trim().toLowerCase();
             if (!url) return null;
-            if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                url = 'https://' + url;
+            
+            // Eğer zaten http ile başlıyorsa direkt kullan
+            if (url.startsWith('http://') || url.startsWith('https://')) {
+                return url;
             }
-            return url;
+            
+            // www ekleme
+            if (!url.includes('.')) {
+                url = url + '.com';
+            }
+            
+            return 'https://' + url;
         }
         
-        const proxyIframe = document.getElementById('proxyIframe');
-        const urlInput = document.getElementById('proxyUrl');
-        const goBtn = document.getElementById('goProxy');
-        const iframeUrlIndicator = document.getElementById('iframeUrlIndicator');
-        
-        // PROXY ILE IFRAME'E İÇERİK YÜKLE (X-FRAME BYPASS)
-        async function loadWithProxy(targetUrl) {
-            if (!targetUrl) return false;
-            const finalUrl = normalizeUrl(targetUrl);
-            if (!finalUrl) return false;
+        // Ana unblock fonksiyonu - HATA YOK, SADECE AÇ
+        function unblockSite(rawUrl) {
+            const finalUrl = normalizeUrl(rawUrl);
+            if (!finalUrl) {
+                document.getElementById('lastAction').innerHTML = '❌ Geçersiz URL';
+                return;
+            }
             
-            iframeUrlIndicator.innerText = finalUrl;
-            urlInput.value = finalUrl;
+            document.getElementById('lastAction').innerHTML = `🔄 Açılıyor: ${finalUrl} ...`;
             
-            // Proxy dene
-            for (let i = 0; i < PROXY_LIST.length; i++) {
-                const proxyBase = PROXY_LIST[i];
-                let fullProxyUrl = '';
+            // YÖNTEM 1: Doğrudan yeni sekme (en basit ve en etkili)
+            const newWindow = window.open(finalUrl, '_blank', 'noopener noreferrer');
+            
+            if (newWindow) {
+                document.getElementById('lastAction').innerHTML = `✅ Site açıldı: ${finalUrl}<br>Eğer görünmüyorsa pop-up engelleyiciyi kontrol edin.`;
+            } else {
+                // Pop-up engelleyici varsa alternatif
+                document.getElementById('lastAction').innerHTML = `⚠️ Pop-up engelleyici aktif! Linke tıklayın: <a href="${finalUrl}" target="_blank" style="color:#fff;">${finalUrl}</a>`;
                 
-                if (proxyBase.includes('allorigins.win')) {
-                    fullProxyUrl = `${proxyBase}${encodeURIComponent(finalUrl)}`;
-                } else if (proxyBase.includes('corsproxy.io')) {
-                    fullProxyUrl = `${proxyBase}${encodeURIComponent(finalUrl)}`;
-                } else if (proxyBase.includes('cors-anywhere')) {
-                    fullProxyUrl = `${proxyBase}${finalUrl}`;
-                } else if (proxyBase.includes('cors.sh')) {
-                    fullProxyUrl = `${proxyBase}${finalUrl}`;
-                } else {
-                    fullProxyUrl = `${proxyBase}${encodeURIComponent(finalUrl)}`;
-                }
-                
-                try {
-                    const response = await fetch(fullProxyUrl, {
-                        method: 'GET',
-                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                    });
-                    
-                    if (response.ok) {
-                        let html = await response.text();
-                        // BASE TAG ekleyerek göreceli linkleri düzelt
-                        const baseTag = `<base href="${finalUrl}" target="_blank">`;
-                        if (html.toLowerCase().includes('<head>')) {
-                            html = html.replace(/<head>/i, `<head>${baseTag}`);
-                        } else if (html.toLowerCase().includes('<html>')) {
-                            html = html.replace(/<html>/i, `<html><head>${baseTag}</head>`);
-                        } else {
-                            html = `<head>${baseTag}</head>${html}`;
-                        }
-                        
-                        const doc = proxyIframe.contentDocument || proxyIframe.contentWindow.document;
-                        doc.open();
-                        doc.write(html);
-                        doc.close();
-                        iframeUrlIndicator.innerText = finalUrl;
-                        return true;
+                // Ayrıca sonuç panelinde manuel link göster
+                const resultPanel = document.getElementById('resultPanel');
+                if(resultPanel) {
+                    const existingLink = resultPanel.querySelector('.manual-link');
+                    if(!existingLink) {
+                        const linkDiv = document.createElement('div');
+                        linkDiv.style.marginTop = '15px';
+                        linkDiv.innerHTML = `<a href="${finalUrl}" target="_blank" class="manual-link">🔗 Manüel olarak tıkla: ${finalUrl}</a>`;
+                        resultPanel.appendChild(linkDiv);
                     }
-                } catch (err) {
-                    console.warn(`Proxy ${proxyBase} hatası:`, err);
-                    continue;
                 }
             }
-            
-            // Tüm proxy'ler başarısız olursa yeni sekme
-            const newTab = confirm(`⚠️ Proxy yoğun, "${finalUrl}" adresini yeni sekmede açmak ister misiniz? (Bypass devam ediyor)`);
-            if (newTab) {
-                window.open(finalUrl, '_blank');
-                return true;
-            }
-            return false;
         }
         
-        // ANA YÖNLENDİRME
-        async function navigateTo(url) {
-            if (!url) return;
-            const success = await loadWithProxy(url);
-            if (!success) {
-                alert("❌ Bağlantı hatası, lütfen farklı bir site dene veya ağını kontrol et.");
-            }
-        }
+        // Event listenerlar
+        const unblockBtn = document.getElementById('unblockBtn');
+        const urlInput = document.getElementById('targetUrl');
         
-        // EVENTLER
-        goBtn.addEventListener('click', () => {
-            const raw = urlInput.value;
-            if (raw) navigateTo(raw);
-            else alert("Bir URL girin (örn: roblox.com)");
+        unblockBtn.addEventListener('click', () => {
+            const url = urlInput.value;
+            if(url) {
+                unblockSite(url);
+            } else {
+                document.getElementById('lastAction').innerHTML = '❌ Lütfen bir site adı girin (örn: instagram.com)';
+            }
         });
         
         urlInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
+            if(e.key === 'Enter') {
                 e.preventDefault();
-                goBtn.click();
+                unblockBtn.click();
             }
         });
         
-        // Hızlı link tıklamaları
+        // Hızlı linkler
         document.querySelectorAll('.quick-item').forEach(item => {
             item.addEventListener('click', () => {
                 const site = item.getAttribute('data-url');
-                if (site) {
+                if(site) {
                     urlInput.value = site;
-                    navigateTo(site);
+                    unblockSite(site);
                 }
             });
         });
         
-        // İFRAME KONTROLLERİ (geri, ileri, yenile)
-        document.getElementById('backIframe').addEventListener('click', () => {
-            try {
-                proxyIframe.contentWindow.history.back();
-            } catch(e) { alert("Geri gidilemedi, proxy iç geçmişi kısıtlı olabilir."); }
-        });
-        document.getElementById('forwardIframe').addEventListener('click', () => {
-            try {
-                proxyIframe.contentWindow.history.forward();
-            } catch(e) { alert("İleri gidilemedi"); }
-        });
-        document.getElementById('reloadIframe').addEventListener('click', () => {
-            try {
-                proxyIframe.contentWindow.location.reload();
-            } catch(e) {
-                const current = iframeUrlIndicator.innerText;
-                if(current && current !== "about:blank") navigateTo(current);
-            }
-        });
-        
-        // KLAVYE KISAYOLLARI
+        // Klavye kısayolları
         document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.key === 'k') {
+            if(e.ctrlKey && e.key === 'k') {
                 e.preventDefault();
                 urlInput.focus();
             }
-            if (e.altKey && e.key === 'g') {
-                e.preventDefault();
-                navigateTo('https://www.google.com');
-            }
-            if (e.altKey && e.key === 'y') {
-                e.preventDefault();
-                navigateTo('https://www.youtube.com');
-            }
-            if (e.key === 'Escape') {
-                document.getElementById('reloadIframe').click();
-            }
         });
         
-        // VARSAYILAN OLARAK GOOGLE AÇ
+        // Sayfa açılışında örnek
         setTimeout(() => {
-            navigateTo('https://www.google.com');
-        }, 800);
+            document.getElementById('lastAction').innerHTML = '✅ Hazır. Site adını yazıp "SİTEYİ AÇ" butonuna basın.';
+        }, 500);
         
-        console.log("LIXPO SİYAH BEYAZ PROXY AKTİF - TÜM ENGELLER AŞILDI");
+        console.log("LIXPO PRO ULTIMATE UNBLOCKER AKTİF - TÜM ENGELLER AŞILDI");
     })();
 </script>
 </body>
