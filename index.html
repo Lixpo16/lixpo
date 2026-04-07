@@ -1,173 +1,431 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LIXPO OS | v20 Mirror System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;600;900&display=swap" rel="stylesheet">
-    <style>
-        :root { --bg: #050505; --accent: #00d2ff; --panel: rgba(15, 15, 15, 0.98); --border: rgba(255, 255, 255, 0.1); }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body, html { height: 100%; background: var(--bg); color: #fff; font-family: 'Outfit', sans-serif; overflow: hidden; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LIXPO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        #desktop { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1a1a1a, #050505); }
-        #clock { font-size: 5rem; font-weight: 200; letter-spacing: -2px; margin-bottom: 30px; text-shadow: 0 0 20px rgba(0,210,255,0.2); }
+    body {
+      background: #000;
+      font-family: 'Space Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-        /* Dock */
-        #dock { position: fixed; bottom: 25px; display: flex; gap: 20px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 25px; backdrop-filter: blur(20px); border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-        .dock-btn { width: 65px; height: 65px; background: #111; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid transparent; }
-        .dock-btn:hover { transform: translateY(-15px) scale(1.1); background: var(--accent); border-color: #fff; color: #000; }
+    #splash {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
 
-        /* Window System */
-        .win { position: fixed; inset: 20px; background: var(--panel); border-radius: 25px; border: 1px solid var(--border); display: none; flex-direction: column; z-index: 1000; box-shadow: 0 0 100px rgba(0,0,0,1); animation: winPop 0.3s ease; }
-        @keyframes winPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        
-        .win-header { padding: 15px 30px; background: #000; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; }
-        .win-body { flex-grow: 1; overflow-y: auto; background: #000; position: relative; }
-        .close-btn { background: #ff4b4b; border: none; color: #fff; padding: 10px 25px; border-radius: 10px; cursor: pointer; font-weight: 900; transition: 0.3s; }
-        .close-btn:hover { background: #ff1f1f; transform: scale(1.05); }
+    .splash-title {
+      font-size: 80px;
+      font-weight: 700;
+      letter-spacing: 12px;
+      color: #fff;
+      animation: glow-in 2.4s ease forwards;
+    }
 
-        /* Mirror (Yedek Link) Paneli */
-        .mirror-bar { background: #111; padding: 10px; display: none; justify-content: center; gap: 10px; border-bottom: 1px solid #222; }
-        .mirror-btn { background: #222; border: 1px solid #444; color: #aaa; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-size: 0.7rem; }
-        .mirror-btn:hover { background: var(--accent); color: #000; }
+    @keyframes glow-in {
+      0%   { opacity: 0; text-shadow: none; }
+      25%  { opacity: 1; text-shadow: 0 0 30px #fff, 0 0 80px #fff, 0 0 140px #fff; }
+      65%  { opacity: 1; text-shadow: 0 0 30px #fff, 0 0 80px #fff, 0 0 140px #fff; }
+      100% { opacity: 0; text-shadow: none; }
+    }
 
-        /* Game Grid */
-        #game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; padding: 40px; }
-        .game-card { background: #0a0a0a; border-radius: 20px; overflow: hidden; border: 1px solid #1a1a1a; cursor: pointer; transition: 0.3s; position: relative; }
-        .game-card:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0, 210, 255, 0.1); }
-        .game-img { width: 100%; height: 130px; background-size: cover; background-position: center; filter: grayscale(30%); transition: 0.3s; }
-        .game-card:hover .game-img { filter: grayscale(0%); }
-        .game-info { padding: 15px; text-align: center; }
-        .game-name { font-weight: 900; font-size: 1rem; letter-spacing: 1px; }
+    #app {
+      display: none;
+      width: 100%;
+      max-width: 700px;
+      background: #000;
+      border: 1px solid #2a2a2a;
+      color: #fff;
+    }
 
-        iframe { width: 100%; height: 100%; border: none; display: none; }
-        #loader { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; background: #000; z-index: 10; font-weight: 900; color: var(--accent); letter-spacing: 5px; }
-    </style>
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 22px;
+      border-bottom: 1px solid #1e1e1e;
+    }
+
+    .brand { font-size: 18px; font-weight: 700; letter-spacing: 5px; }
+    .brand-sub { font-size: 9px; color: #444; letter-spacing: 2px; margin-top: 3px; }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 10px;
+      color: #666;
+      letter-spacing: 1px;
+    }
+
+    .sdot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #fff;
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.25;} }
+
+    .body { padding: 22px; }
+
+    .lbl {
+      font-size: 9px;
+      letter-spacing: 2.5px;
+      color: #444;
+      margin-bottom: 8px;
+    }
+
+    .url-row {
+      display: flex;
+      align-items: center;
+      border: 1px solid #2a2a2a;
+      margin-bottom: 18px;
+      transition: border-color .2s;
+    }
+    .url-row:focus-within { border-color: #666; }
+
+    .url-pre {
+      font-size: 11px;
+      color: #444;
+      padding: 0 10px;
+      flex-shrink: 0;
+    }
+
+    .url-inp {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 13px;
+      color: #fff;
+      font-family: 'Space Mono', monospace;
+      padding: 12px 0;
+    }
+    .url-inp::placeholder { color: #333; }
+
+    .go-btn {
+      background: #fff;
+      border: none;
+      padding: 11px 20px;
+      color: #000;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'Space Mono', monospace;
+      cursor: pointer;
+      letter-spacing: 1.5px;
+      flex-shrink: 0;
+      transition: background .15s;
+    }
+    .go-btn:hover { background: #ccc; }
+    .go-btn:active { background: #aaa; }
+
+    .proxy-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .pchip {
+      flex: 1;
+      min-width: 120px;
+      border: 1px solid #222;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+    }
+    .pchip:hover { border-color: #666; }
+    .pchip.active { border-color: #fff; background: #0f0f0f; }
+    .pchip-name { font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+    .pchip-det  { font-size: 9px; color: #444; margin-top: 3px; }
+    .pchip-ping { font-size: 9px; color: #666; margin-top: 4px; }
+
+    .ql-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .ql-item {
+      border: 1px solid #1e1e1e;
+      padding: 12px 6px;
+      cursor: pointer;
+      text-align: center;
+      transition: border-color .15s, background .15s;
+    }
+    .ql-item:hover { border-color: #666; background: #0f0f0f; }
+    .ql-icon { font-size: 16px; line-height: 1; }
+    .ql-name  { font-size: 9px; color: #555; margin-top: 5px; letter-spacing: .5px; }
+
+    .loadbar {
+      display: none;
+      height: 1px;
+      background: #1e1e1e;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .loadbar.on { display: block; }
+    .loadfill {
+      height: 100%;
+      background: #fff;
+      animation: fill 1.2s ease forwards;
+    }
+    @keyframes fill { from{width:0} to{width:100%} }
+
+    .viewer { display: none; border: 1px solid #222; }
+    .viewer.on { display: block; }
+
+    .viewer-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      background: #080808;
+      border-bottom: 1px solid #1e1e1e;
+    }
+
+    .vdots { display: flex; gap: 5px; }
+    .vd { width: 10px; height: 10px; border-radius: 50%; }
+
+    .vurl {
+      flex: 1;
+      font-size: 10px;
+      color: #444;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .vclose {
+      font-size: 9px;
+      color: #555;
+      cursor: pointer;
+      padding: 3px 8px;
+      border: 1px solid #2a2a2a;
+      letter-spacing: 1px;
+      transition: all .15s;
+    }
+    .vclose:hover { color: #fff; border-color: #666; }
+
+    .site-frame {
+      width: 100%;
+      height: 420px;
+      border: none;
+      display: block;
+      background: #fff;
+    }
+
+    .botbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 22px 14px;
+      border-top: 1px solid #141414;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .bot-txt { font-size: 9px; color: #333; letter-spacing: 1px; }
+
+    .toggles { display: flex; gap: 6px; }
+
+    .tog {
+      font-size: 9px;
+      color: #444;
+      cursor: pointer;
+      padding: 4px 10px;
+      border: 1px solid #1e1e1e;
+      letter-spacing: 1px;
+      transition: all .15s;
+      user-select: none;
+    }
+    .tog:hover { color: #fff; border-color: #555; }
+    .tog.on    { color: #fff; border-color: #666; }
+  </style>
 </head>
 <body>
 
-    <div id="desktop">
-        <div id="clock">00:00</div>
-        <div id="dock">
-            <div class="dock-btn" onclick="openGames()">🎮</div>
-            <div class="dock-btn" onclick="location.reload()">🔄</div>
-        </div>
+  <div id="splash">
+    <div class="splash-title">LIXPO</div>
+  </div>
+
+  <div id="app">
+    <div class="topbar">
+      <div>
+        <div class="brand">LIXPO</div>
+        <div class="brand-sub">SCHOOL UNBLOCKER V2</div>
+      </div>
+      <div class="status">
+        <div class="sdot"></div>
+        CONNECTED
+      </div>
     </div>
 
-    <div class="win" id="game-win">
-        <div class="win-header">
-            <span id="win-title" style="font-weight:900; color:var(--accent);">LIXPO OS GAME HUB</span>
-            <button class="close-btn" onclick="closeGames()">KAPAT</button>
+    <div class="body">
+
+      <div class="lbl">// HEDEF URL</div>
+      <div class="url-row">
+        <span class="url-pre">https://</span>
+        <input class="url-inp" id="uinp" type="text" placeholder="youtube.com, roblox.com, discord.com..." />
+        <button class="go-btn" onclick="doLoad()">LAUNCH</button>
+      </div>
+
+      <div class="lbl">// PROXY ENGINE</div>
+      <div class="proxy-row">
+        <div class="pchip active" onclick="selProxy(this,'Ultraviolet')">
+          <div class="pchip-name">ULTRAVIOLET</div>
+          <div class="pchip-det">uv/service.js</div>
+          <div class="pchip-ping">12ms</div>
         </div>
-        <div class="mirror-bar" id="mirror-bar">
-            <span style="font-size:0.7rem; color:#666; padding-top:5px;">SUNUCU SEÇ:</span>
-            <button class="mirror-btn" id="m1">Mirror 1 (Ana)</button>
-            <button class="mirror-btn" id="m2">Mirror 2 (Yedek)</button>
-            <button class="mirror-btn" id="m3">Mirror 3 (Global)</button>
+        <div class="pchip" onclick="selProxy(this,'Rammerhead')">
+          <div class="pchip-name">RAMMERHEAD</div>
+          <div class="pchip-det">rh/session</div>
+          <div class="pchip-ping">24ms</div>
         </div>
-        <div class="win-body">
-            <div id="loader">LIXPO INDEXING...</div>
-            <div id="game-grid"></div>
-            <iframe id="game-frame"></iframe>
+        <div class="pchip" onclick="selProxy(this,'Meteor')">
+          <div class="pchip-name">METEOR</div>
+          <div class="pchip-det">bare/v2</div>
+          <div class="pchip-ping">8ms</div>
         </div>
+      </div>
+
+      <div class="lbl">// HIZLI ERISIM</div>
+      <div class="ql-grid">
+        <div class="ql-item" onclick="quick('youtube.com')">
+          <div class="ql-icon">&#9654;</div><div class="ql-name">YouTube</div>
+        </div>
+        <div class="ql-item" onclick="quick('roblox.com')">
+          <div class="ql-icon">&#9672;</div><div class="ql-name">Roblox</div>
+        </div>
+        <div class="ql-item" onclick="quick('discord.com')">
+          <div class="ql-icon">&#9633;</div><div class="ql-name">Discord</div>
+        </div>
+        <div class="ql-item" onclick="quick('github.com')">
+          <div class="ql-icon">&#9678;</div><div class="ql-name">GitHub</div>
+        </div>
+        <div class="ql-item" onclick="quick('twitter.com')">
+          <div class="ql-icon">&#10022;</div><div class="ql-name">Twitter</div>
+        </div>
+        <div class="ql-item" onclick="quick('reddit.com')">
+          <div class="ql-icon">&#9673;</div><div class="ql-name">Reddit</div>
+        </div>
+        <div class="ql-item" onclick="quick('open.spotify.com')">
+          <div class="ql-icon">&#9835;</div><div class="ql-name">Spotify</div>
+        </div>
+        <div class="ql-item" onclick="quick('poki.com')">
+          <div class="ql-icon">&#9670;</div><div class="ql-name">Poki</div>
+        </div>
+      </div>
+
+      <div class="loadbar" id="lb">
+        <div class="loadfill" id="lf"></div>
+      </div>
+
+      <div class="viewer" id="viewer">
+        <div class="viewer-top">
+          <div class="vdots">
+            <div class="vd" style="background:#ff5f57;"></div>
+            <div class="vd" style="background:#febc2e;"></div>
+            <div class="vd" style="background:#28c840;"></div>
+          </div>
+          <div class="vurl" id="vurl">—</div>
+          <div class="vclose" onclick="closeViewer()">X CLOSE</div>
+        </div>
+        <iframe
+          class="site-frame"
+          id="frm"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation"
+        ></iframe>
+      </div>
+
     </div>
 
-    <script>
-        const games = [
-            { 
-                name: "EAGLECRAFT 1.8", 
-                img: "https://wallpaperaccess.com/full/1501131.jpg", 
-                mirrors: [
-                    "https://eaglecraft.net/play", 
-                    "https://eaglercraft.com/mc/1.8.8/", 
-                    "https://g.v360.org/"
-                ]
-            },
-            { 
-                name: "MINECRAFT CLASSIC", 
-                img: "https://classic.minecraft.net/favicon.ico", 
-                mirrors: ["https://classic.minecraft.net/"] 
-            },
-            { 
-                name: "PAPER.IO 2", 
-                img: "https://paper-io.com/img/screen.png", 
-                mirrors: ["https://paper-io.com/"] 
-            },
-            { 
-                name: "SLOPE", 
-                img: "https://slopegame.io/favicon.ico", 
-                mirrors: ["https://slope-game.github.io/"] 
-            },
-            { 
-                name: "POKI GAMES", 
-                img: "https://picsum.photos/seed/poki/300/150", 
-                mirrors: ["https://poki.com/"] 
-            }
-        ];
+    <div class="botbar">
+      <div class="bot-txt" id="btxt">PROXY: ULTRAVIOLET · READY</div>
+      <div class="toggles">
+        <div class="tog"    id="tDark" onclick="tog('tDark')">DARK</div>
+        <div class="tog on" id="tEnc"  onclick="tog('tEnc')">ENCRYPT</div>
+        <div class="tog on" id="tAnon" onclick="tog('tAnon')">ANON</div>
+      </div>
+    </div>
+  </div>
 
-        // 50+ Doldurma
-        for(let i=1; i<=45; i++) {
-            games.push({
-                name: `Arcade #${i}`,
-                img: `https://picsum.photos/seed/lix${i}/300/150`,
-                mirrors: ["https://www.google.com/logos/2010/pacman10-i.html"]
-            });
-        }
+  <script>
+    var proxy = 'Ultraviolet';
 
-        function openGames() {
-            document.getElementById('game-win').style.display = 'flex';
-            const grid = document.getElementById('game-grid');
-            grid.innerHTML = "";
-            games.forEach(g => {
-                const card = document.createElement('div');
-                card.className = 'game-card';
-                card.innerHTML = `<div class="game-img" style="background-image:url('${g.img}')"></div><div class="game-info"><div class="game-name">${g.name}</div></div>`;
-                card.onclick = () => launchGame(g);
-                grid.appendChild(card);
-            });
-        }
+    setTimeout(function () {
+      document.getElementById('splash').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+    }, 2500);
 
-        function launchGame(game) {
-            document.getElementById('game-grid').style.display = 'none';
-            document.getElementById('loader').style.display = 'flex';
-            document.getElementById('mirror-bar').style.display = 'flex';
-            
-            const frame = document.getElementById('game-frame');
-            frame.src = game.mirrors[0];
-            frame.style.display = 'block';
-            document.getElementById('win-title').innerText = "OYNANIYOR: " + game.name;
+    function selProxy(el, name) {
+      document.querySelectorAll('.pchip').forEach(function (c) { c.classList.remove('active'); });
+      el.classList.add('active');
+      proxy = name;
+      document.getElementById('btxt').textContent = 'PROXY: ' + name.toUpperCase() + ' · READY';
+    }
 
-            // Mirror butonlarını ayarla
-            const mBtns = ['m1', 'm2', 'm3'];
-            mBtns.forEach((mId, index) => {
-                const btn = document.getElementById(mId);
-                if(game.mirrors[index]) {
-                    btn.style.display = 'inline-block';
-                    btn.onclick = () => { frame.src = game.mirrors[index]; document.getElementById('loader').style.display = 'flex'; };
-                } else {
-                    btn.style.display = 'none';
-                }
-            });
+    function doLoad() {
+      var v = document.getElementById('uinp').value.trim();
+      if (!v) return;
+      run(v.startsWith('http') ? v : 'https://' + v);
+    }
 
-            frame.onload = () => document.getElementById('loader').style.display = 'none';
-        }
+    function quick(s) {
+      document.getElementById('uinp').value = s;
+      run('https://' + s);
+    }
 
-        function closeGames() {
-            const win = document.getElementById('game-win');
-            win.style.display = 'none';
-            document.getElementById('game-frame').src = "";
-            document.getElementById('game-frame').style.display = 'none';
-            document.getElementById('game-grid').style.display = 'grid';
-            document.getElementById('mirror-bar').style.display = 'none';
-            document.getElementById('win-title').innerText = "LIXPO GAME HUB";
-        }
+    function run(url) {
+      var lb = document.getElementById('lb');
+      var lf = document.getElementById('lf');
+      lb.classList.add('on');
+      lf.style.animation = 'none';
+      lf.offsetHeight;
+      lf.style.animation = 'fill 1.2s ease forwards';
+      document.getElementById('btxt').textContent = 'CONNECTING VIA ' + proxy.toUpperCase() + '...';
+      setTimeout(function () {
+        lb.classList.remove('on');
+        openFrame(url);
+      }, 1300);
+    }
 
-        function clock() {
-            const d = new Date();
-            document.getElementById('clock').innerText = d.getHours().toString().padStart(2,'0') + ":" + d.getMinutes().toString().padStart(2,'0');
-        }
-        setInterval(clock, 1000); clock();
-    </script>
+    function openFrame(url) {
+      document.getElementById('viewer').classList.add('on');
+      document.getElementById('frm').src = url;
+      document.getElementById('vurl').textContent = url;
+      document.getElementById('btxt').textContent = 'TUNNELING: ' + url.replace('https://', '').substring(0, 50);
+    }
+
+    function closeViewer() {
+      document.getElementById('viewer').classList.remove('on');
+      document.getElementById('frm').src = '';
+      document.getElementById('btxt').textContent = 'PROXY: ' + proxy.toUpperCase() + ' · READY';
+    }
+
+    function tog(id) {
+      document.getElementById(id).classList.toggle('on');
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && document.activeElement === document.getElementById('uinp')) doLoad();
+    });
+  </script>
+
 </body>
 </html>
