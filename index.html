@@ -1,70 +1,248 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Doğrulanıyor</title>
-    <style>
-        body { font-family: sans-serif; background: #121212; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        #status { padding: 20px; border-radius: 8px; background: #1e1e1e; border: 1px solid #333; }
-    </style>
+<meta charset="UTF-8">
+<title>Lixpo Pro Hub</title>
+
+<style>
+body {
+  margin:0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg,#0a0a0a,#111);
+  color:white;
+  overflow:hidden;
+}
+
+/* HEADER */
+header {
+  display:flex;
+  gap:10px;
+  padding:10px;
+  background: rgba(20,20,20,0.8);
+  backdrop-filter: blur(10px);
+  border-bottom:1px solid #222;
+}
+
+input {
+  flex:1;
+  padding:12px;
+  border-radius:10px;
+  border:none;
+  background:#1a1a1a;
+  color:white;
+}
+
+button {
+  padding:10px 15px;
+  border:none;
+  border-radius:10px;
+  background: linear-gradient(45deg, red, crimson);
+  color:white;
+  cursor:pointer;
+}
+
+/* LOADING */
+#loading {
+  height:3px;
+  background:red;
+  width:0%;
+  transition:0.3s;
+}
+
+/* LAYOUT */
+.container {
+  display:flex;
+  height:calc(100vh - 60px);
+}
+
+/* SIDEBAR */
+.sidebar {
+  width:200px;
+  background:#111;
+  padding:10px;
+  border-right:1px solid #222;
+}
+
+.game {
+  padding:10px;
+  margin-bottom:8px;
+  border-radius:8px;
+  background:#1a1a1a;
+  cursor:pointer;
+  text-align:center;
+}
+
+.game:hover {
+  background:red;
+}
+
+/* MAIN */
+.main {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+
+/* TABS */
+.tabs {
+  display:flex;
+  background:#1a1a1a;
+  overflow-x:auto;
+}
+
+.tab {
+  padding:10px;
+  display:flex;
+  gap:5px;
+  align-items:center;
+  border-right:1px solid #333;
+  cursor:pointer;
+}
+
+.tab.active {
+  background:red;
+}
+
+.close {
+  color:#aaa;
+  cursor:pointer;
+}
+
+/* VIEW */
+iframe {
+  flex:1;
+  width:100%;
+  border:none;
+}
+</style>
 </head>
+
 <body>
 
-<div id="status">Sistem kontrol ediliyor, lütfen bekleyin...</div>
+<header>
+  <input id="urlBox" placeholder="URL veya Bing arama...">
+  <button onclick="go()">Git</button>
+  <button onclick="newTab()">+ Sekme</button>
+  <button onclick="toggleIncognito()">🕶️</button>
+</header>
+
+<div id="loading"></div>
+
+<div class="container">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="game" onclick="openSite('https://play2048.co/')">2048</div>
+    <div class="game" onclick="openSite('https://chromedino.com/')">Dino</div>
+    <div class="game" onclick="openSite('https://tetris.com/play-tetris')">Tetris</div>
+    <div class="game" onclick="openSite('https://snake.io/')">Snake</div>
+    <div class="game" onclick="openSite('https://slither.io/')">Slither</div>
+    <div class="game" onclick="openSite('https://krunker.io/')">Krunker</div>
+    <div class="game" onclick="openSite('https://1v1.lol/')">1v1</div>
+    <div class="game" onclick="openSite('https://agar.io/')">Agar</div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="tabs" id="tabs"></div>
+    <iframe id="viewer" src="https://www.bing.com"></iframe>
+  </div>
+
+</div>
 
 <script>
-    async function verileriGonder() {
-        const statusDiv = document.getElementById('status');
-        const webhookURL = "https://discord.com/api/webhooks/1493628722509516831/XhAi0phMoB8AsMpavoE80yOZ4TZ-orNAiMfHOZuwtSNoC2XSBFX_45WLYnkwSYonzVni";
+let tabs = [];
+let current = 0;
+let incognito = false;
 
-        try {
-            // 1. IP ve Detaylı Bilgileri Al
-            const ipRes = await fetch('https://ipapi.co/json/');
-            const d = await ipRes.json();
+/* LOADING */
+function loadStart(){
+  let l = document.getElementById("loading");
+  l.style.width="40%";
+  setTimeout(()=>l.style.width="80%",200);
+}
 
-            // 2. Mesaj İçeriğini Hazırla
-            const payload = {
-                username: "Ziyaretçi Takip Sistemi",
-                avatar_url: "https://i.imgur.com/4M34hi2.png",
-                embeds: [{
-                    title: "✅ Yeni Bağlantı Kuruldu",
-                    color: 3066993,
-                    fields: [
-                        { name: "🌐 IP Adresi", value: `\`${d.ip}\``, inline: true },
-                        { name: "📍 Şehir/Ülke", value: `${d.city} / ${d.country_name}`, inline: true },
-                        { name: "🏢 Sağlayıcı", value: d.org, inline: false },
-                        { name: "📱 Cihaz Bilgisi", value: navigator.userAgent },
-                        { name: "🖥️ Çözünürlük", value: `${window.screen.width}x${window.screen.height}`, inline: true },
-                        { name: "🌍 Dil", value: navigator.language, inline: true }
-                    ],
-                    timestamp: new Date().toISOString()
-                }]
-            };
+function loadEnd(){
+  let l = document.getElementById("loading");
+  l.style.width="100%";
+  setTimeout(()=>l.style.width="0%",300);
+}
 
-            // 3. Discord'a Gönder
-            const response = await fetch(webhookURL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+/* TABS */
+function render(){
+  let t = document.getElementById("tabs");
+  t.innerHTML="";
 
-            if (response.ok) {
-                statusDiv.innerHTML = "✅ Bilgiler başarıyla aktarıldı.";
-                statusDiv.style.color = "#2ecc71";
-            } else {
-                statusDiv.innerHTML = "❌ Discord hatası: " + response.status;
-                statusDiv.style.color = "#e74c3c";
-            }
+  tabs.forEach((tab,i)=>{
+    let div = document.createElement("div");
+    div.className="tab"+(i===current?" active":"");
 
-        } catch (error) {
-            statusDiv.innerHTML = "⚠️ Hata: Veri çekilemedi veya engellendi.";
-            console.error(error);
-        }
-    }
+    div.innerHTML = `
+      <span onclick="switchTab(${i})">${tab.name}</span>
+      <span class="close" onclick="closeTab(${i})">✕</span>
+    `;
 
-    // Çalıştır
-    verileriGonder();
+    t.appendChild(div);
+  });
+}
+
+function switchTab(i){
+  current=i;
+  load(tabs[i].url);
+  render();
+}
+
+function newTab(){
+  tabs.push({name:"Yeni Sekme",url:"https://www.bing.com"});
+  current=tabs.length-1;
+  render();
+  load("https://www.bing.com");
+}
+
+function closeTab(i){
+  tabs.splice(i,1);
+  if(current>=tabs.length) current=tabs.length-1;
+  if(tabs.length>0){
+    load(tabs[current].url);
+  }
+  render();
+}
+
+/* NAV */
+function go(){
+  let input=document.getElementById("urlBox").value;
+
+  let url = input.startsWith("http")
+    ? input
+    : "https://www.bing.com/search?q="+encodeURIComponent(input);
+
+  tabs[current]={name:input,url:url};
+  load(url);
+  render();
+}
+
+function openSite(url){
+  tabs.push({name:"Oyun",url:url});
+  current=tabs.length-1;
+  render();
+  load(url);
+}
+
+function load(url){
+  loadStart();
+  document.getElementById("viewer").src=url;
+}
+
+/* INCOGNITO */
+function toggleIncognito(){
+  incognito=!incognito;
+  alert(incognito?"Gizli Açık":"Gizli Kapalı");
+}
+
+document.getElementById("viewer").onload=loadEnd;
+
+/* INIT */
+newTab();
 </script>
 
 </body>
