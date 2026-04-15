@@ -2,246 +2,199 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Lixpo Pro Hub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lixpo Unblocker</title>
 
 <style>
 body {
   margin:0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg,#0a0a0a,#111);
+  font-family: Arial, sans-serif;
+  background:#0a0a0a;
   color:white;
   overflow:hidden;
 }
 
-/* HEADER */
-header {
+/* Splash Screen */
+#splash {
+  position:fixed;
+  width:100%;
+  height:100%;
   display:flex;
-  gap:10px;
-  padding:10px;
-  background: rgba(20,20,20,0.8);
-  backdrop-filter: blur(10px);
-  border-bottom:1px solid #222;
+  justify-content:center;
+  align-items:center;
+  background:black;
+  z-index:999;
 }
 
-input {
-  flex:1;
-  padding:12px;
-  border-radius:10px;
-  border:none;
-  background:#1a1a1a;
-  color:white;
+#logo {
+  font-size:60px;
+  font-weight:bold;
+  color:red;
+  animation: blink 0.8s infinite;
 }
 
-button {
-  padding:10px 15px;
-  border:none;
-  border-radius:10px;
-  background: linear-gradient(45deg, red, crimson);
-  color:white;
-  cursor:pointer;
+@keyframes blink {
+  0% {opacity:1;}
+  50% {opacity:0.2;}
+  100% {opacity:1;}
 }
 
-/* LOADING */
-#loading {
-  height:3px;
-  background:red;
-  width:0%;
-  transition:0.3s;
-}
-
-/* LAYOUT */
-.container {
-  display:flex;
-  height:calc(100vh - 60px);
-}
-
-/* SIDEBAR */
-.sidebar {
-  width:200px;
-  background:#111;
-  padding:10px;
-  border-right:1px solid #222;
-}
-
-.game {
-  padding:10px;
-  margin-bottom:8px;
-  border-radius:8px;
-  background:#1a1a1a;
-  cursor:pointer;
-  text-align:center;
-}
-
-.game:hover {
-  background:red;
-}
-
-/* MAIN */
-.main {
-  flex:1;
+/* Main UI */
+#app {
+  display:none;
+  height:100vh;
   display:flex;
   flex-direction:column;
 }
 
-/* TABS */
-.tabs {
+/* Top bar */
+#topbar {
+  background:#111;
+  padding:10px;
   display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+#url {
+  flex:1;
+  padding:10px;
+  border:none;
+  outline:none;
   background:#1a1a1a;
-  overflow-x:auto;
+  color:white;
+  border-radius:8px;
+}
+
+button {
+  background:red;
+  border:none;
+  padding:10px 15px;
+  color:white;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+/* Tabs */
+#tabs {
+  display:flex;
+  background:#0f0f0f;
 }
 
 .tab {
-  padding:10px;
-  display:flex;
-  gap:5px;
-  align-items:center;
-  border-right:1px solid #333;
+  padding:8px 15px;
   cursor:pointer;
+  background:#1a1a1a;
+  margin-right:5px;
+  border-radius:6px;
 }
 
 .tab.active {
   background:red;
 }
 
-.close {
-  color:#aaa;
-  cursor:pointer;
-}
-
-/* VIEW */
-iframe {
+/* iframe */
+#frame {
   flex:1;
   width:100%;
   border:none;
+}
+
+/* Loader */
+#loader {
+  position:absolute;
+  top:0;
+  left:0;
+  height:3px;
+  width:0%;
+  background:red;
+  transition:0.3s;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <input id="urlBox" placeholder="URL veya Bing arama...">
-  <button onclick="go()">Git</button>
-  <button onclick="newTab()">+ Sekme</button>
-  <button onclick="toggleIncognito()">🕶️</button>
-</header>
+<!-- Splash -->
+<div id="splash">
+  <div id="logo">LIXPO</div>
+</div>
 
-<div id="loading"></div>
+<!-- App -->
+<div id="app">
+  <div id="loader"></div>
 
-<div class="container">
-
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="game" onclick="openSite('https://play2048.co/')">2048</div>
-    <div class="game" onclick="openSite('https://chromedino.com/')">Dino</div>
-    <div class="game" onclick="openSite('https://tetris.com/play-tetris')">Tetris</div>
-    <div class="game" onclick="openSite('https://snake.io/')">Snake</div>
-    <div class="game" onclick="openSite('https://slither.io/')">Slither</div>
-    <div class="game" onclick="openSite('https://krunker.io/')">Krunker</div>
-    <div class="game" onclick="openSite('https://1v1.lol/')">1v1</div>
-    <div class="game" onclick="openSite('https://agar.io/')">Agar</div>
+  <div id="topbar">
+    <input id="url" placeholder="Site gir... (örnek: google.com)">
+    <button onclick="openSite()">Git</button>
+    <button onclick="newTab()">+ Tab</button>
   </div>
 
-  <!-- MAIN -->
-  <div class="main">
-    <div class="tabs" id="tabs"></div>
-    <iframe id="viewer" src="https://www.bing.com"></iframe>
-  </div>
+  <div id="tabs"></div>
 
+  <iframe id="frame"></iframe>
 </div>
 
 <script>
 let tabs = [];
-let current = 0;
-let incognito = false;
+let currentTab = 0;
 
-/* LOADING */
-function loadStart(){
-  let l = document.getElementById("loading");
-  l.style.width="40%";
-  setTimeout(()=>l.style.width="80%",200);
+setTimeout(() => {
+  document.getElementById("splash").style.display="none";
+  document.getElementById("app").style.display="flex";
+}, 2000);
+
+function formatURL(url){
+  if(!url.startsWith("http")){
+    return "https://" + url;
+  }
+  return url;
 }
 
-function loadEnd(){
-  let l = document.getElementById("loading");
-  l.style.width="100%";
-  setTimeout(()=>l.style.width="0%",300);
-}
+function openSite(){
+  let url = document.getElementById("url").value;
+  url = formatURL(url);
 
-/* TABS */
-function render(){
-  let t = document.getElementById("tabs");
-  t.innerHTML="";
+  document.getElementById("loader").style.width="100%";
 
-  tabs.forEach((tab,i)=>{
-    let div = document.createElement("div");
-    div.className="tab"+(i===current?" active":"");
+  setTimeout(()=>{
+    document.getElementById("loader").style.width="0%";
+  },500);
 
-    div.innerHTML = `
-      <span onclick="switchTab(${i})">${tab.name}</span>
-      <span class="close" onclick="closeTab(${i})">✕</span>
-    `;
-
-    t.appendChild(div);
-  });
-}
-
-function switchTab(i){
-  current=i;
-  load(tabs[i].url);
-  render();
+  tabs[currentTab].url = url;
+  loadTab(currentTab);
 }
 
 function newTab(){
-  tabs.push({name:"Yeni Sekme",url:"https://www.bing.com"});
-  current=tabs.length-1;
-  render();
-  load("https://www.bing.com");
+  tabs.push({url:"https://example.com"});
+  currentTab = tabs.length - 1;
+  renderTabs();
+  loadTab(currentTab);
 }
 
-function closeTab(i){
-  tabs.splice(i,1);
-  if(current>=tabs.length) current=tabs.length-1;
-  if(tabs.length>0){
-    load(tabs[current].url);
-  }
-  render();
+function loadTab(index){
+  currentTab = index;
+  document.getElementById("frame").src = tabs[index].url;
+  document.getElementById("url").value = tabs[index].url;
+  renderTabs();
 }
 
-/* NAV */
-function go(){
-  let input=document.getElementById("urlBox").value;
+function renderTabs(){
+  let tabBar = document.getElementById("tabs");
+  tabBar.innerHTML = "";
 
-  let url = input.startsWith("http")
-    ? input
-    : "https://www.bing.com/search?q="+encodeURIComponent(input);
+  tabs.forEach((t, i)=>{
+    let el = document.createElement("div");
+    el.className = "tab" + (i===currentTab ? " active":"");
+    el.innerText = "Tab " + (i+1);
 
-  tabs[current]={name:input,url:url};
-  load(url);
-  render();
+    el.onclick = ()=>loadTab(i);
+
+    tabBar.appendChild(el);
+  });
 }
 
-function openSite(url){
-  tabs.push({name:"Oyun",url:url});
-  current=tabs.length-1;
-  render();
-  load(url);
-}
-
-function load(url){
-  loadStart();
-  document.getElementById("viewer").src=url;
-}
-
-/* INCOGNITO */
-function toggleIncognito(){
-  incognito=!incognito;
-  alert(incognito?"Gizli Açık":"Gizli Kapalı");
-}
-
-document.getElementById("viewer").onload=loadEnd;
-
-/* INIT */
+/* first tab */
 newTab();
 </script>
 
